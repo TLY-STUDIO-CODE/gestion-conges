@@ -24,7 +24,6 @@ Route::get('/dashboard', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/employees', [EmployeeWebController::class, 'index'])->name('employees.index');
     Route::get('/leave-requests', [LeaveRequestWebController::class, 'index'])->name('leave-requests.index');
-    Route::get('/employees', [EmployeeController::class, 'index'])->name('employees.index');
 });
 
 Route::middleware('auth')->group(function () {
