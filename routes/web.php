@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EmployeeWebController;
+use App\Http\Controllers\LeaveRequestWebController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -21,6 +22,7 @@ Route::get('/dashboard', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/employees', [EmployeeWebController::class, 'index'])->name('employees.index');
+    Route::get('/leave-requests', [LeaveRequestWebController::class, 'index'])->name('leave-requests.index');
 });
 
 Route::middleware('auth')->group(function () {
