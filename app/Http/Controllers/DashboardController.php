@@ -22,8 +22,8 @@ class DashboardController extends Controller
             ]);
         }
 
-        // Vue et données personnelles pour l'Employé
-        $employee = Employee::where('email', $user->email)->first();
+        // Vue et données personnelles pour l'Employé (Liaison directe via user_id)
+        $employee = $user->employee;
 
         return Inertia::render('Dashboard/EmployeeDashboard', [
             'employee' => $employee,

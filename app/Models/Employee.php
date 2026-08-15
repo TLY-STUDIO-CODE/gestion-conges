@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Employee extends Model
 {
     protected $fillable = [
+        'user_id',
         'first_name',
         'last_name',
         'email',
@@ -14,6 +15,11 @@ class Employee extends Model
         'hire_date',
         'leave_balance',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     public function leaveRequests()
     {
