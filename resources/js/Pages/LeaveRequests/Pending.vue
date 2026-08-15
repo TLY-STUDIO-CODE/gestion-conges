@@ -1,10 +1,14 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
 
 defineProps({
     pendingRequests: Array,
 });
+
+const page = usePage();
+const flash = computed(() => page.props.flash || {});
 
 const actionForm = useForm({});
 
@@ -33,18 +37,18 @@ const rejectRequest = (id) => {
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
-                <!-- Message Flash de succès ou d'erreur -->
-                <div v-if="$page.props.flash.success" class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
-                    {{ $page.props.flash.success }}
+                <!-- Message Flash de succès ou d'erreur sécurisé -->
+                <div v-if="flash.success" class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
+                    {{ flash.success }}
                 </div>
-                <div v-if="$page.props.flash.error" class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
-                    {{ $page.props.flash.error }}
+                <div v-if="flash.error" class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
+                    {{ flash.error }}
                 </div>
 
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                    <h3 class="text-lg font-medium text-gray-900 mb-4">Demandes nécessitant une action ({{ pendingRequests.length }})</h3>
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Demandes nécessitant une action ({{ pendingRequests?.length || 0 }})</h3>
 
-                    <div v-if="pendingRequests.length === 0" class="text-gray-500 italic py-4">
+                    <div v-if="!pendingRequests || pendingRequests.length === 0" class="text-gray-500 italic py-4">
                         Aucune demande en attente pour le moment. Bon travail !
                     </div>
 
