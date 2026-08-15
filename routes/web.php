@@ -30,7 +30,7 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
     Route::patch('/leave-requests/{leaveRequest}/reject', [LeaveRequestWebController::class, 'reject'])->name('leave-requests.reject');
 });
 
-// Routes partagées pour la gestion des congés (création/suivi par l'employé)
+// Routes partagées pour la gestion des congés (création, édition, suppression, index)
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('leave-requests', LeaveRequestWebController::class)->except(['pending', 'approve', 'reject']);
 });

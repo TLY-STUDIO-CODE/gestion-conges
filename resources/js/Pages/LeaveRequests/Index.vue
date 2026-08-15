@@ -7,9 +7,9 @@ defineProps({
     leaveRequests: Array,
 });
 
-// Récupération de l'utilisateur connecté via Inertia page props
 const page = usePage();
 const userRole = computed(() => page.props.auth.user.role);
+const currentEmployeeId = computed(() => page.props.auth.user.employee?.id);
 
 const actionForm = useForm({});
 
@@ -19,6 +19,12 @@ const approveRequest = (id) => {
 
 const rejectRequest = (id) => {
     actionForm.patch(route('leave-requests.reject', id));
+};
+
+const deleteRequest = (id) => {
+    if (confirm('Voulez-vous vraiment supprimer cette demande de congé ?')) {
+        actionForm.delete(route('leave-requests.destroy', id));
+    }
 };
 </script>
 
@@ -39,7 +45,6 @@ const rejectRequest = (id) => {
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
 
-                    <!-- Tableau des demandes -->
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead>
                             <tr>
@@ -48,8 +53,7 @@ const rejectRequest = (id) => {
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Du / Au</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Jours</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Statut</th>
-                                <!-- Colonne Actions RH visible uniquement pour les administrateurs -->
-                                <th v-if="userRole === 'admin'" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions RH</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
@@ -69,19 +73,33 @@ const rejectRequest = (id) => {
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <span :class="{
                                         'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800': req.status === 'en_attente',
-                                        'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800': req.status === 'approuve' || req.status === 'approuvé',
-                                        'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800': req.status === 'refuse' || req.status === 'rejeté'
+                                        'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800': req.status === 'approved' || req.status === 'approuvé',
+                                        'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800': req.status === 'rejected' || req.status === 'rejeté'
                                     }">
                                         {{ req.status }}
                                     </span>
                                 </td>
-                                <!-- Cellule Actions RH conditionnée par le rôle de l'utilisateur -->
-                                <td v-if="userRole === 'admin'" class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                                    <div v-if="req.status === 'en_attente'" class="flex space-x-2">
-                                        <button @click="approveRequest(req.id)" class="text-green-600 hover:text-green-900 font-bold">Approuver</button>
-                                        <button @click="rejectRequest(req.id)" class="text-red-600 hover:text-red-900 font-bold">Rejeter</button>
-                                    </div>
-                                    <span v-else class="text-gray-400 italic text-xs">Traité</span>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                                    <!-- Si Admin : Approuver, Rejeter, Modifier, Supprimer -->
+                                    <template v-if="userRole === 'admin'">
+                                        <div v-if="req.status === 'en_attente'" class="inline-flex space-x-2 mb-1">
+                                            <button @click="approveRequest(req.id)" class="text-green-600 hover:text-green-900 font-bold">Approuver</button>
+                                            <button @click="rejectRequest(req.id)" class="text-red-600 hover:text-red-900 font-bold">Rejeter</button>
+                                        </div>
+                                        <div class="space-x-2">
+                                            <Link :href="route('leave-requests.edit', req.id)" class="text-indigo-600 hover:text-indigo-900">Modifier</Link>
+                                            <button @click="deleteRequest(req.id)" class="text-red-600 hover:text-red-900">Supprimer</button>
+                                        </div>
+                                    </template>
+
+                                    <!-- Si Employé : Modification/Suppression autorisée uniquement si 'en_attente' et que c'est sa demande -->
+                                    <template v-else>
+                                        <div v-if="req.status === 'en_attente'" class="space-x-2">
+                                            <Link :href="route('leave-requests.edit', req.id)" class="text-indigo-600 hover:text-indigo-900 font-bold">Modifier</Link>
+                                            <button @click="deleteRequest(req.id)" class="text-red-600 hover:text-red-900 font-bold">Supprimer</button>
+                                        </div>
+                                        <span v-else class="text-gray-400 italic text-xs">Verrouillé</span>
+                                    </template>
                                 </td>
                             </tr>
                         </tbody>
