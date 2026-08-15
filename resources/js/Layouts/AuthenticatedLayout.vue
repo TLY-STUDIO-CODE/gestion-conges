@@ -4,10 +4,14 @@ import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import { Link } from '@inertiajs/vue3';
-import { ref } from 'vue';
+import { Link, usePage } from '@inertiajs/vue3';
+import { computed, ref } from 'vue';
 
 const showingNavigationDropdown = ref(false);
+
+// Récupération de l'utilisateur connecté via Inertia pour vérifier son rôle
+const page = usePage();
+const isAdmin = computed(() => page.props.auth.user?.is_admin === true);
 </script>
 
 <template>
@@ -39,18 +43,24 @@ const showingNavigationDropdown = ref(false);
                                 >
                                     Dashboard
                                 </NavLink>
-                                <NavLink :href="route('employees.index')"
-                                         :active="route().current('employees.index')"
-                                >
-                                    Employés
-                                </NavLink>
+
+                                <!-- Liens restreints STRICTEMENT aux administrateurs -->
+                                <template v-if="isAdmin">
+                                    <NavLink :href="route('employees.index')"
+                                             :active="route().current('employees.*')"
+                                    >
+                                        Employés
+                                    </NavLink>
+                                    <NavLink :href="route('leave-requests.pending')" :active="route().current('leave-requests.pending')">
+                                        Espace RH
+                                    </NavLink>
+                                </template>
+
+                                <!-- Lien général (Accessible à tous) -->
                                 <NavLink :href="route('leave-requests.index')"
                                          :active="route().current('leave-requests.index')"
                                 >
                                     Congés
-                                </NavLink>
-                                <NavLink :href="route('leave-requests.pending')" :active="route().current('leave-requests.pending')">
-                                    Espace RH
                                 </NavLink>
                             </div>
                         </div>
@@ -144,7 +154,7 @@ const showingNavigationDropdown = ref(false);
                     </div>
                 </div>
 
-                <!-- Responsive Navigation Menu -->
+                <!-- Responsive Navigation Menu (Mobile) -->
                 <div
                     :class="{
                         block: showingNavigationDropdown,
@@ -159,23 +169,28 @@ const showingNavigationDropdown = ref(false);
                         >
                             Dashboard
                         </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            :href="route('employees.index')"
-                            :active="route().current('employees.index')"
-                        >
-                            Employés
-                        </ResponsiveNavLink>
+
+                        <!-- Liens Admin mobiles conditionnels -->
+                        <template v-if="isAdmin">
+                            <ResponsiveNavLink
+                                :href="route('employees.index')"
+                                :active="route().current('employees.*')"
+                            >
+                                Employés
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink
+                                :href="route('leave-requests.pending')"
+                                :active="route().current('leave-requests.pending')"
+                            >
+                                Espace RH
+                            </ResponsiveNavLink>
+                        </template>
+
                         <ResponsiveNavLink
                             :href="route('leave-requests.index')"
                             :active="route().current('leave-requests.index')"
                         >
                             Congés
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            :href="route('leave-requests.pending')"
-                            :active="route().current('leave-requests.pending')"
-                        >
-                            Espace RH
                         </ResponsiveNavLink>
                     </div>
 

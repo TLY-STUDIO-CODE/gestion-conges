@@ -21,14 +21,17 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-Route::middleware(['auth', 'verified'])->group(function () {
+// Routes accessibles uniquement aux Administrateurs
+Route::middleware(['auth', 'verified', 'admin'])->group(function () {
     Route::resource('employees', EmployeeWebController::class);
-    // Route dédiée pour l'espace de validation RH
     Route::get('/leave-requests/pending', [LeaveRequestWebController::class, 'pending'])->name('leave-requests.pending');
-    Route::resource('leave-requests', LeaveRequestWebController::class);
-    // Routes spécifiques pour le workflow de validation RH
     Route::patch('/leave-requests/{leaveRequest}/approve', [LeaveRequestWebController::class, 'approve'])->name('leave-requests.approve');
     Route::patch('/leave-requests/{leaveRequest}/reject', [LeaveRequestWebController::class, 'reject'])->name('leave-requests.reject');
+});
+
+// Routes partagées ou spécifiques aux employés (ex: suivi de leurs propres congés)
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::resource('leave-requests', LeaveRequestWebController::class)->except(['pending', 'approve', 'reject']);
 });
 
 Route::middleware('auth')->group(function () {
