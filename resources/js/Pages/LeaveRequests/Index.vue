@@ -1,10 +1,15 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Head, Link, useForm, usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
 
 defineProps({
     leaveRequests: Array,
 });
+
+// Récupération de l'utilisateur connecté via Inertia page props
+const page = usePage();
+const userRole = computed(() => page.props.auth.user.role);
 
 const actionForm = useForm({});
 
@@ -43,7 +48,8 @@ const rejectRequest = (id) => {
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Du / Au</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Jours</th>
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Statut</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions RH</th>
+                                <!-- Colonne Actions RH visible uniquement pour les administrateurs -->
+                                <th v-if="userRole === 'admin'" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions RH</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
@@ -53,7 +59,7 @@ const rejectRequest = (id) => {
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-gray-500">
                                     {{ req.leave_type ? req.leave_type.name : 'N/A' }}
-                                  </td>
+                                </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     {{ req.start_date }} au {{ req.end_date }}
                                 </td>
@@ -63,13 +69,14 @@ const rejectRequest = (id) => {
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <span :class="{
                                         'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800': req.status === 'en_attente',
-                                        'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800': req.status === 'approuvé',
-                                        'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800': req.status === 'rejeté'
+                                        'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800': req.status === 'approuve' || req.status === 'approuvé',
+                                        'px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800': req.status === 'refuse' || req.status === 'rejeté'
                                     }">
                                         {{ req.status }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                                <!-- Cellule Actions RH conditionnée par le rôle de l'utilisateur -->
+                                <td v-if="userRole === 'admin'" class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                                     <div v-if="req.status === 'en_attente'" class="flex space-x-2">
                                         <button @click="approveRequest(req.id)" class="text-green-600 hover:text-green-900 font-bold">Approuver</button>
                                         <button @click="rejectRequest(req.id)" class="text-red-600 hover:text-red-900 font-bold">Rejeter</button>
