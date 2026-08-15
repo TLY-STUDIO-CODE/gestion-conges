@@ -9,9 +9,12 @@ import { computed, ref } from 'vue';
 
 const showingNavigationDropdown = ref(false);
 
-// Récupération sécurisée du rôle administrateur
+// Récupération sécurisée du rôle administrateur (prend en compte le booléen ou la chaîne de caractères)
 const page = usePage();
-const isAdmin = computed(() => page.props.auth.user?.is_admin === true);
+const user = computed(() => page.props.auth.user);
+const isAdmin = computed(() => {
+    return user.value?.is_admin === true || user.value?.role === 'admin';
+});
 </script>
 
 <template>
@@ -40,7 +43,7 @@ const isAdmin = computed(() => page.props.auth.user?.is_admin === true);
                                     Dashboard
                                 </NavLink>
 
-                                <!-- Liens spécifiques Administrateur -->
+                                <!-- Liens spécifiques Administrateur (Visibles pour tous les admins) -->
                                 <template v-if="isAdmin">
                                     <NavLink
                                         :href="route('employees.index')"
