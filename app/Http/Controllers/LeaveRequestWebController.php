@@ -18,11 +18,9 @@ class LeaveRequestWebController extends Controller
     {
         $user = $request->user();
 
-        // Si c'est un admin, il voit toutes les demandes
         if ($user->isAdmin()) {
             $leaveRequests = LeaveRequest::with(['employee', 'leaveType'])->latest()->get();
         } else {
-            // Si c'est un employé simple, il ne voit QUE ses propres demandes
             $employee = $user->employee;
             $leaveRequests = $employee ? $employee->leaveRequests()->with(['employee', 'leaveType'])->latest()->get() : [];
         }
@@ -32,7 +30,6 @@ class LeaveRequestWebController extends Controller
         ]);
     }
 
-    // Affiche uniquement les demandes en attente pour les RH
     public function pending(Request $request)
     {
         $user = $request->user();
@@ -53,7 +50,6 @@ class LeaveRequestWebController extends Controller
     {
         $user = $request->user();
 
-        // Si l'utilisateur est admin, il peut potentiellement choisir, sinon on restreint à son propre profil employé
         if ($user->isAdmin()) {
             $employees = Employee::all();
         } else {
@@ -71,7 +67,6 @@ class LeaveRequestWebController extends Controller
         $data = $request->validated();
         $user = $request->user();
 
-        // Sécurité supplémentaire : un employé normal ne peut soumettre une demande que pour lui-même
         if (!$user->isAdmin()) {
             $employee = $user->employee;
             if (!$employee || $data['employee_id'] != $employee->id) {
@@ -79,7 +74,6 @@ class LeaveRequestWebController extends Controller
             }
         }
 
-        // Calcul automatique des jours ouvrés (hors weekends)
         $start = Carbon::parse($data['start_date']);
         $end = Carbon::parse($data['end_date']);
         $period = CarbonPeriod::create($start, $end);
@@ -97,7 +91,7 @@ class LeaveRequestWebController extends Controller
             'start_date' => $data['start_date'],
             'end_date' => $data['end_date'],
             'days_count' => $businessDays,
-            'status' => 'en_attente',
+            'status' => 'en_attente', // 'en_attente' est généralement accepté, sinon mettre 'pending'
             'reason' => $data['reason'] ?? null,
         ]);
 
@@ -106,7 +100,8 @@ class LeaveRequestWebController extends Controller
 
     public function approve(LeaveRequest $leaveRequest): RedirectResponse
     {
-        if ($leaveRequest->status === 'approuvé') {
+        // On vérifie avec la valeur en anglais acceptée par la contrainte SQL de la base de données
+        if ($leaveRequest->status === 'approved' || $leaveRequest->status === 'approuvé') {
             return back()->with('error', 'Cette demande a déjà été approuvée.');
         }
 
@@ -120,14 +115,16 @@ class LeaveRequestWebController extends Controller
             $employee->decrement('leave_balance', $leaveRequest->days_count);
         }
 
-        $leaveRequest->update(['status' => 'approuvé']);
+        // Utilisation de 'approved' pour respecter la contrainte CHECK de PostgreSQL
+        $leaveRequest->update(['status' => 'approved']);
 
         return back()->with('success', 'Demande approuvée et solde mis à jour avec succès.');
     }
 
     public function reject(LeaveRequest $leaveRequest): RedirectResponse
     {
-        $leaveRequest->update(['status' => 'rejeté']);
+        // Utilisation de 'rejected' pour respecter la contrainte CHECK de PostgreSQL
+        $leaveRequest->update(['status' => 'rejected']);
 
         return back()->with('success', 'Demande de congé rejetée.');
     }
