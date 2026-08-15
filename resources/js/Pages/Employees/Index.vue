@@ -1,11 +1,19 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import { Head, Link, useForm } from '@inertiajs/vue3';
 
 defineProps({
     employees: Array,
     departments: Array,
 });
+
+const deleteForm = useForm({});
+
+const deleteEmployee = (id) => {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cet employé ?')) {
+        deleteForm.delete(route('employees.destroy', id));
+    }
+};
 </script>
 
 <template>
@@ -21,7 +29,12 @@ defineProps({
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 text-gray-900">
-                    <h3 class="text-lg font-medium mb-4">Liste des Salariés</h3>
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-lg font-medium text-gray-900">Liste des Salariés</h3>
+                        <Link :href="route('employees.create')" class="px-4 py-2 bg-indigo-600 text-white rounded hover:bg-indigo-700 transition">
+                            + Ajouter un employé
+                        </Link>
+                    </div>
 
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">
@@ -32,6 +45,7 @@ defineProps({
                                     <th class="px-6 py-3">Département</th>
                                     <th class="px-6 py-3">Solde Congés</th>
                                     <th class="px-6 py-3">Embauche</th>
+                                    <th class="px-6 py-3">Actions</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white divide-y divide-gray-200">
@@ -45,9 +59,13 @@ defineProps({
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-gray-500 font-bold">{{ emp.leave_balance }} jours</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-gray-500">{{ emp.hire_date }}</td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                                        <Link :href="route('employees.edit', emp.id)" class="text-indigo-600 hover:text-indigo-900">Modifier</Link>
+                                        <button @click="deleteEmployee(emp.id)" class="text-red-600 hover:text-red-900">Supprimer</button>
+                                    </td>
                                 </tr>
                                 <tr v-if="employees.length === 0">
-                                    <td colspan="5" class="px-6 py-4 text-center text-gray-500">Aucun employé trouvé.</td>
+                                    <td colspan="6" class="px-6 py-4 text-center text-gray-500">Aucun employé trouvé.</td>
                                 </tr>
                             </tbody>
                         </table>
