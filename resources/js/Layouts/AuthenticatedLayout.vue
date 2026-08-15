@@ -9,7 +9,7 @@ import { computed, ref } from 'vue';
 
 const showingNavigationDropdown = ref(false);
 
-// Récupération de l'utilisateur connecté via Inertia pour vérifier son rôle
+// Récupération sécurisée du rôle administrateur
 const page = usePage();
 const isAdmin = computed(() => page.props.auth.user?.is_admin === true);
 </script>
@@ -17,9 +17,7 @@ const isAdmin = computed(() => page.props.auth.user?.is_admin === true);
 <template>
     <div>
         <div class="min-h-screen bg-gray-100">
-            <nav
-                class="border-b border-gray-100 bg-white"
-            >
+            <nav class="border-b border-gray-100 bg-white">
                 <!-- Primary Navigation Menu -->
                 <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div class="flex h-16 justify-between">
@@ -34,9 +32,7 @@ const isAdmin = computed(() => page.props.auth.user?.is_admin === true);
                             </div>
 
                             <!-- Navigation Links -->
-                            <div
-                                class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"
-                            >
+                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink
                                     :href="route('dashboard')"
                                     :active="route().current('dashboard')"
@@ -44,21 +40,26 @@ const isAdmin = computed(() => page.props.auth.user?.is_admin === true);
                                     Dashboard
                                 </NavLink>
 
-                                <!-- Liens restreints STRICTEMENT aux administrateurs -->
+                                <!-- Liens spécifiques Administrateur -->
                                 <template v-if="isAdmin">
-                                    <NavLink :href="route('employees.index')"
-                                             :active="route().current('employees.*')"
+                                    <NavLink
+                                        :href="route('employees.index')"
+                                        :active="route().current('employees.*')"
                                     >
                                         Employés
                                     </NavLink>
-                                    <NavLink :href="route('leave-requests.pending')" :active="route().current('leave-requests.pending')">
+                                    <NavLink
+                                        :href="route('leave-requests.pending')"
+                                        :active="route().current('leave-requests.pending')"
+                                    >
                                         Espace RH
                                     </NavLink>
                                 </template>
 
-                                <!-- Lien général (Accessible à tous) -->
-                                <NavLink :href="route('leave-requests.index')"
-                                         :active="route().current('leave-requests.index')"
+                                <!-- Lien général Congés (Accessible à tous) -->
+                                <NavLink
+                                    :href="route('leave-requests.index')"
+                                    :active="route().current('leave-requests.index')"
                                 >
                                     Congés
                                 </NavLink>
@@ -94,9 +95,7 @@ const isAdmin = computed(() => page.props.auth.user?.is_admin === true);
                                     </template>
 
                                     <template #content>
-                                        <DropdownLink
-                                            :href="route('profile.edit')"
-                                        >
+                                        <DropdownLink :href="route('profile.edit')">
                                             Profile
                                         </DropdownLink>
                                         <DropdownLink
@@ -111,26 +110,17 @@ const isAdmin = computed(() => page.props.auth.user?.is_admin === true);
                             </div>
                         </div>
 
-                        <!-- Hamburger -->
+                        <!-- Hamburger Menu Mobile -->
                         <div class="-me-2 flex items-center sm:hidden">
                             <button
-                                @click="
-                                    showingNavigationDropdown =
-                                        !showingNavigationDropdown
-                                "
+                                @click="showingNavigationDropdown = !showingNavigationDropdown"
                                 class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none"
                             >
-                                <svg
-                                    class="h-6 w-6"
-                                    stroke="currentColor"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                >
+                                <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                                     <path
                                         :class="{
                                             hidden: showingNavigationDropdown,
-                                            'inline-flex':
-                                                !showingNavigationDropdown,
+                                            'inline-flex': !showingNavigationDropdown,
                                         }"
                                         stroke-linecap="round"
                                         stroke-linejoin="round"
@@ -140,8 +130,7 @@ const isAdmin = computed(() => page.props.auth.user?.is_admin === true);
                                     <path
                                         :class="{
                                             hidden: !showingNavigationDropdown,
-                                            'inline-flex':
-                                                showingNavigationDropdown,
+                                            'inline-flex': showingNavigationDropdown,
                                         }"
                                         stroke-linecap="round"
                                         stroke-linejoin="round"
@@ -170,7 +159,7 @@ const isAdmin = computed(() => page.props.auth.user?.is_admin === true);
                             Dashboard
                         </ResponsiveNavLink>
 
-                        <!-- Liens Admin mobiles conditionnels -->
+                        <!-- Liens Admin Mobiles -->
                         <template v-if="isAdmin">
                             <ResponsiveNavLink
                                 :href="route('employees.index')"
@@ -195,13 +184,9 @@ const isAdmin = computed(() => page.props.auth.user?.is_admin === true);
                     </div>
 
                     <!-- Responsive Settings Options -->
-                    <div
-                        class="border-t border-gray-200 pb-1 pt-4"
-                    >
+                    <div class="border-t border-gray-200 pb-1 pt-4">
                         <div class="px-4">
-                            <div
-                                class="text-base font-medium text-gray-800"
-                            >
+                            <div class="text-base font-medium text-gray-800">
                                 {{ $page.props.auth.user.name }}
                             </div>
                             <div class="text-sm font-medium text-gray-500">
@@ -226,10 +211,7 @@ const isAdmin = computed(() => page.props.auth.user?.is_admin === true);
             </nav>
 
             <!-- Page Heading -->
-            <header
-                class="bg-white shadow"
-                v-if="$slots.header"
-            >
+            <header class="bg-white shadow" v-if="$slots.header">
                 <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
                     <slot name="header" />
                 </div>
