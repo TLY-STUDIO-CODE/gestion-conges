@@ -6,5 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Employee extends Model
 {
-    //
+   public function leaveRequests()
+   {
+        return $this->hasMany(LeaveRequest::class);
+
+    }
 }
