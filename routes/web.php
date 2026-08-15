@@ -23,6 +23,8 @@ Route::get('/dashboard', function () {
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('employees', EmployeeWebController::class);
+    // Route dédiée pour l'espace de validation RH
+    Route::get('/leave-requests/pending', [LeaveRequestWebController::class, 'pending'])->name('leave-requests.pending');
     Route::resource('leave-requests', LeaveRequestWebController::class);
     // Routes spécifiques pour le workflow de validation RH
     Route::patch('/leave-requests/{leaveRequest}/approve', [LeaveRequestWebController::class, 'approve'])->name('leave-requests.approve');

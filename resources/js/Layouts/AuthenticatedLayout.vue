@@ -49,6 +49,9 @@ const showingNavigationDropdown = ref(false);
                                 >
                                     Congés
                                 </NavLink>
+                                <NavLink :href="route('leave-requests.pending')" :active="route().current('leave-requests.pending')">
+                                    Espace RH
+                                </NavLink>
                             </div>
                         </div>
 
@@ -167,6 +170,12 @@ const showingNavigationDropdown = ref(false);
                             :active="route().current('leave-requests.index')"
                         >
                             Congés
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('leave-requests.pending')"
+                            :active="route().current('leave-requests.pending')"
+                        >
+                            Espace RH
                         </ResponsiveNavLink>
                     </div>
 

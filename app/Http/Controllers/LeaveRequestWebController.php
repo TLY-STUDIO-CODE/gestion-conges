@@ -20,6 +20,17 @@ class LeaveRequestWebController extends Controller
         ]);
     }
 
+    // Affiche uniquement les demandes en attente pour les RH
+    public function pending()
+    {
+        return Inertia::render('LeaveRequests/Pending', [
+            'pendingRequests' => LeaveRequest::with(['employee', 'leaveType'])
+                ->where('status', 'en_attente')
+                ->latest()
+                ->get(),
+        ]);
+    }
+
     public function create()
     {
         return Inertia::render('LeaveRequests/Create', [
