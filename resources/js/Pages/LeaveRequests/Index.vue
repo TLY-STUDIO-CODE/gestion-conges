@@ -9,7 +9,6 @@ defineProps({
 
 const page = usePage();
 const userRole = computed(() => page.props.auth.user.role);
-const currentEmployeeId = computed(() => page.props.auth.user.employee?.id);
 
 const actionForm = useForm({});
 
@@ -19,6 +18,10 @@ const approveRequest = (id) => {
 
 const rejectRequest = (id) => {
     actionForm.patch(route('leave-requests.reject', id));
+};
+
+const pendingRequest = (id) => {
+    actionForm.patch(route('leave-requests.pending-status', id));
 };
 
 const deleteRequest = (id) => {
@@ -79,16 +82,18 @@ const deleteRequest = (id) => {
                                         {{ req.status }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                                    <!-- Si Admin : Approuver, Rejeter, Modifier, Supprimer -->
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <!-- Si Admin : Basculement permanent des statuts + Suppression -->
                                     <template v-if="userRole === 'admin'">
-                                        <div v-if="req.status === 'en_attente'" class="inline-flex space-x-2 mb-1">
-                                            <button @click="approveRequest(req.id)" class="text-green-600 hover:text-green-900 font-bold">Approuver</button>
-                                            <button @click="rejectRequest(req.id)" class="text-red-600 hover:text-red-900 font-bold">Rejeter</button>
-                                        </div>
-                                        <div class="space-x-2">
-                                            <Link :href="route('leave-requests.edit', req.id)" class="text-indigo-600 hover:text-indigo-900">Modifier</Link>
-                                            <button @click="deleteRequest(req.id)" class="text-red-600 hover:text-red-900">Supprimer</button>
+                                        <div class="flex flex-col space-y-1">
+                                            <div class="flex items-center space-x-2">
+                                                <button v-if="req.status !== 'approved'" @click="approveRequest(req.id)" class="text-green-600 hover:text-green-900 font-bold text-xs bg-green-50 px-2 py-1 rounded border border-green-200">Approuver</button>
+                                                <button v-if="req.status !== 'en_attente'" @click="pendingRequest(req.id)" class="text-yellow-600 hover:text-yellow-900 font-bold text-xs bg-yellow-50 px-2 py-1 rounded border border-yellow-200">En attente</button>
+                                                <button v-if="req.status !== 'rejected'" @click="rejectRequest(req.id)" class="text-red-600 hover:text-red-900 font-bold text-xs bg-red-50 px-2 py-1 rounded border border-red-200">Rejeter</button>
+                                            </div>
+                                            <div>
+                                                <button @click="deleteRequest(req.id)" class="text-red-500 hover:text-red-700 text-xs font-semibold underline mt-1">Supprimer</button>
+                                            </div>
                                         </div>
                                     </template>
 

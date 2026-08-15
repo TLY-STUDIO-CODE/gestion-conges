@@ -28,6 +28,8 @@ Route::middleware(['auth', 'verified', 'admin'])->group(function () {
     Route::get('/leave-requests/pending', [LeaveRequestWebController::class, 'pending'])->name('leave-requests.pending');
     Route::patch('/leave-requests/{leaveRequest}/approve', [LeaveRequestWebController::class, 'approve'])->name('leave-requests.approve');
     Route::patch('/leave-requests/{leaveRequest}/reject', [LeaveRequestWebController::class, 'reject'])->name('leave-requests.reject');
+    // Nouvelle route pour remettre une demande en attente
+    Route::patch('/leave-requests/{leaveRequest}/pending-status', [LeaveRequestWebController::class, 'pendingStatus'])->name('leave-requests.pending-status');
 });
 
 // Routes partagées pour la gestion des congés (création, édition, suppression, index)

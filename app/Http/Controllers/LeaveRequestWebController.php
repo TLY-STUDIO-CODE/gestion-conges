@@ -94,20 +94,19 @@ class LeaveRequestWebController extends Controller
     {
         $user = $request->user();
 
-        // Vérification des droits de modification
-        if (!$user->isAdmin()) {
-            $employee = $user->employee;
-            if (!$employee || $leaveRequest->employee_id !== $employee->id || $leaveRequest->status !== 'en_attente') {
-                abort(403, 'Action non autorisée ou demande déjà traitée.');
-            }
-            $employees = [$employee];
-        } else {
-            $employees = Employee::all();
+        // L'admin ne modifie plus les congés directement, seuls les employés peuvent modifier leurs demandes en attente
+        if ($user->isAdmin()) {
+            abort(403, "L'administrateur ne peut pas modifier le contenu d'une demande de congé.");
+        }
+
+        $employee = $user->employee;
+        if (!$employee || $leaveRequest->employee_id !== $employee->id || $leaveRequest->status !== 'en_attente') {
+            abort(403, 'Action non autorisée ou demande déjà traitée.');
         }
 
         return Inertia::render('LeaveRequests/Edit', [
             'leaveRequest' => $leaveRequest,
-            'employees' => $employees,
+            'employees' => [$employee],
             'leaveTypes' => LeaveType::all(),
         ]);
     }
@@ -116,11 +115,13 @@ class LeaveRequestWebController extends Controller
     {
         $user = $request->user();
 
-        if (!$user->isAdmin()) {
-            $employee = $user->employee;
-            if (!$employee || $leaveRequest->employee_id !== $employee->id || $leaveRequest->status !== 'en_attente') {
-                abort(403, 'Action non autorisée.');
-            }
+        if ($user->isAdmin()) {
+            abort(403, "Action non autorisée.");
+        }
+
+        $employee = $user->employee;
+        if (!$employee || $leaveRequest->employee_id !== $employee->id || $leaveRequest->status !== 'en_attente') {
+            abort(403, 'Action non autorisée.');
         }
 
         $data = $request->validated();
@@ -146,6 +147,15 @@ class LeaveRequestWebController extends Controller
             if (!$employee || $leaveRequest->employee_id !== $employee->id || $leaveRequest->status !== 'en_attente') {
                 abort(403, 'Action non autorisée ou demande déjà traitée.');
             }
+        } else {
+            // Si l'admin supprime une demande qui était approuvée, on restitue le solde si c'était un congé payé
+            if ($leaveRequest->status === 'approved') {
+                $employee = $leaveRequest->employee;
+                $leaveType = $leaveRequest->leaveType;
+                if ($employee && $leaveType && str_contains(strtolower($leaveType->name), 'payé')) {
+                    $employee->increment('leave_balance', $leaveRequest->days_count);
+                }
+            }
         }
 
         $leaveRequest->delete();
@@ -155,30 +165,54 @@ class LeaveRequestWebController extends Controller
 
     public function approve(LeaveRequest $leaveRequest): RedirectResponse
     {
-        if ($leaveRequest->status === 'approved' || $leaveRequest->status === 'approuvé') {
-            return back()->with('error', 'Cette demande a déjà été approuvée.');
-        }
-
         $employee = $leaveRequest->employee;
         $leaveType = $leaveRequest->leaveType;
 
-        if ($leaveType && str_contains(strtolower($leaveType->name), 'payé')) {
-            if ($employee->leave_balance < $leaveRequest->days_count) {
-                return back()->with('error', "Impossible d'approuver : solde de congés insuffisant.");
+        // Si la demande n'était PAS déjà approuvée, on décrémente le solde si payé
+        if ($leaveRequest->status !== 'approved') {
+            if ($leaveType && str_contains(strtolower($leaveType->name), 'payé')) {
+                if ($employee->leave_balance < $leaveRequest->days_count) {
+                    return back()->with('error', "Impossible d'approuver : solde de congés insuffisant.");
+                }
+                $employee->decrement('leave_balance', $leaveRequest->days_count);
             }
-            $employee->decrement('leave_balance', $leaveRequest->days_count);
         }
 
         $leaveRequest->update(['status' => 'approved']);
 
-        return back()->with('success', 'Demande approuvée et solde mis à jour avec succès.');
+        return back()->with('success', 'Demande approuvée avec succès.');
     }
 
     public function reject(LeaveRequest $leaveRequest): RedirectResponse
     {
+        // Si elle était approuvée auparavant et qu'on la rejette, on restitue le solde
+        if ($leaveRequest->status === 'approved') {
+            $employee = $leaveRequest->employee;
+            $leaveType = $leaveRequest->leaveType;
+            if ($employee && $leaveType && str_contains(strtolower($leaveType->name), 'payé')) {
+                $employee->increment('leave_balance', $leaveRequest->days_count);
+            }
+        }
+
         $leaveRequest->update(['status' => 'rejected']);
 
         return back()->with('success', 'Demande de congé rejetée.');
+    }
+
+    // Nouvelle méthode pour remettre une demande en attente si besoin
+    public function pendingStatus(LeaveRequest $leaveRequest): RedirectResponse
+    {
+        if ($leaveRequest->status === 'approved') {
+            $employee = $leaveRequest->employee;
+            $leaveType = $leaveRequest->leaveType;
+            if ($employee && $leaveType && str_contains(strtolower($leaveType->name), 'payé')) {
+                $employee->increment('leave_balance', $leaveRequest->days_count);
+            }
+        }
+
+        $leaveRequest->update(['status' => 'en_attente']);
+
+        return back()->with('success', 'Demande remise en attente.');
     }
 
     private function calculateBusinessDays($startDate, $endDate): int
