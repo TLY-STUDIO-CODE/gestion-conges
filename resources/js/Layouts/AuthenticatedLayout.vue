@@ -1,11 +1,11 @@
 <script setup>
-import { ref } from 'vue';
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import Dropdown from '@/Components/Dropdown.vue';
 import DropdownLink from '@/Components/DropdownLink.vue';
 import NavLink from '@/Components/NavLink.vue';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import { Link } from '@inertiajs/vue3';
+import { ref } from 'vue';
 
 const showingNavigationDropdown = ref(false);
 </script>
@@ -38,6 +38,16 @@ const showingNavigationDropdown = ref(false);
                                     :active="route().current('dashboard')"
                                 >
                                     Dashboard
+                                </NavLink>
+                                <NavLink :href="route('employees.index')"
+                                         :active="route().current('employees.index')"
+                                >
+                                    Employés
+                                </NavLink>
+                                <NavLink :href="route('leave-requests.index')"
+                                         :active="route().current('leave-requests.index')"
+                                >
+                                    Congés
                                 </NavLink>
                             </div>
                         </div>
@@ -145,6 +155,18 @@ const showingNavigationDropdown = ref(false);
                             :active="route().current('dashboard')"
                         >
                             Dashboard
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('employees.index')"
+                            :active="route().current('employees.index')"
+                        >
+                            Employés
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            :href="route('leave-requests.index')"
+                            :active="route().current('leave-requests.index')"
+                        >
+                            Congés
                         </ResponsiveNavLink>
                     </div>
 
