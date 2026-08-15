@@ -83,17 +83,13 @@ const deleteRequest = (id) => {
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <!-- Si Admin : Basculement permanent des statuts + Suppression -->
+                                    <!-- Si Admin : Tous les boutons de statut + Suppression alignés et de même type -->
                                     <template v-if="userRole === 'admin'">
-                                        <div class="flex flex-col space-y-1">
-                                            <div class="flex items-center space-x-2">
-                                                <button v-if="req.status !== 'approved'" @click="approveRequest(req.id)" class="text-green-600 hover:text-green-900 font-bold text-xs bg-green-50 px-2 py-1 rounded border border-green-200">Approuver</button>
-                                                <button v-if="req.status !== 'en_attente'" @click="pendingRequest(req.id)" class="text-yellow-600 hover:text-yellow-900 font-bold text-xs bg-yellow-50 px-2 py-1 rounded border border-yellow-200">En attente</button>
-                                                <button v-if="req.status !== 'rejected'" @click="rejectRequest(req.id)" class="text-red-600 hover:text-red-900 font-bold text-xs bg-red-50 px-2 py-1 rounded border border-red-200">Rejeter</button>
-                                            </div>
-                                            <div>
-                                                <button @click="deleteRequest(req.id)" class="text-red-500 hover:text-red-700 text-xs font-semibold underline mt-1">Supprimer</button>
-                                            </div>
+                                        <div class="flex items-center space-x-2">
+                                            <button v-if="req.status !== 'approved'" @click="approveRequest(req.id)" class="text-green-600 hover:text-green-900 font-bold text-xs bg-green-50 px-2 py-1 rounded border border-green-200">Approuver</button>
+                                            <button v-if="req.status !== 'en_attente'" @click="pendingRequest(req.id)" class="text-yellow-600 hover:text-yellow-900 font-bold text-xs bg-yellow-50 px-2 py-1 rounded border border-yellow-200">En attente</button>
+                                            <button v-if="req.status !== 'rejected'" @click="rejectRequest(req.id)" class="text-red-600 hover:text-red-900 font-bold text-xs bg-red-50 px-2 py-1 rounded border border-red-200">Rejeter</button>
+                                            <button @click="deleteRequest(req.id)" class="text-red-600 hover:text-red-900 font-bold text-xs bg-red-50 px-2 py-1 rounded border border-red-200">Supprimer</button>
                                         </div>
                                     </template>
 
