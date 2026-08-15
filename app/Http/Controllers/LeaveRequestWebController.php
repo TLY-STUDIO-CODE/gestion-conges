@@ -58,4 +58,39 @@ class LeaveRequestWebController extends Controller
 
         return redirect()->route('leave-requests.index')->with('success', 'Demande de congé soumise avec succès !');
     }
+
+    // Approuver une demande de congé et déduire le solde
+    public function approve(LeaveRequest $leaveRequest): RedirectResponse
+    {
+        // Empêcher de re-valider une demande déjà approuvée
+        if ($leaveRequest->status === 'approuvé') {
+            return back()->with('error', 'Cette demande a déjà été approuvée.');
+        }
+
+        $employee = $leaveRequest->employee;
+        $leaveType = $leaveRequest->leaveType;
+
+        // Si c'est un congé payé, on déduit le solde
+        if ($leaveType && str_contains(strtolower($leaveType->name), 'payé')) {
+            if ($employee->leave_balance < $leaveRequest->days_count) {
+                return back()->with('error', "Impossible d'approuver : solde de congés insuffisant.");
+            }
+
+            // Déduction du solde
+            $employee->decrement('leave_balance', $leaveRequest->days_count);
+        }
+
+        // Mettre à jour le statut de la demande
+        $leaveRequest->update(['status' => 'approuvé']);
+
+        return back()->with('success', 'Demande approuvée et solde mis à jour avec succès.');
+    }
+
+    // Rejeter une demande de congé
+    public function reject(LeaveRequest $leaveRequest): RedirectResponse
+    {
+        $leaveRequest->update(['status' => 'rejeté']);
+
+        return back()->with('success', 'Demande de congé rejetée.');
+    }
 }
