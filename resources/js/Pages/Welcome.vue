@@ -12,50 +12,54 @@ defineProps({
 </script>
 
 <template>
-    <Head title="Portail RH - Région Haute Matsiatra" />
+    <Head title="Portail Officiel des Ressources Humaines - Région Haute Matsiatra" />
 
-    <div class="min-h-screen bg-slate-50 flex flex-col justify-between text-slate-800">
+    <div class="min-h-screen bg-slate-50 flex flex-col justify-between text-slate-900 selection:bg-blue-900 selection:text-white">
         <!-- En-tête / Header Institutionnel -->
-        <header class="bg-white border-b border-slate-200 shadow-sm">
+        <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-                <div class="flex items-center space-x-3">
-                    <!-- Icône / Logo Institutionnel provisoire -->
-                    <div class="w-10 h-10 bg-blue-900 rounded-lg flex items-center justify-center text-white font-bold text-xl shadow">
-                        RM
+                <div class="flex items-center space-x-4">
+                    <!-- Sceau / Logo Officiel -->
+                    <div class="w-12 h-12 bg-gradient-to-br from-blue-900 to-slate-900 rounded-lg flex items-center justify-center text-white font-serif font-bold text-xl shadow-inner border border-blue-800">
+                        HM
                     </div>
                     <div>
-                        <h1 class="text-lg font-bold text-slate-900 leading-tight">
+                        <div class="flex items-center space-x-2">
+                            <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+                            <span class="text-xs font-bold tracking-widest text-slate-500 uppercase">République de Madagascar</span>
+                        </div>
+                        <h1 class="text-base sm:text-lg font-bold text-slate-900 leading-tight">
                             Région Haute Matsiatra
                         </h1>
-                        <p class="text-xs text-slate-500 uppercase tracking-wider font-semibold">
+                        <p class="text-xs text-blue-900 font-semibold tracking-wide">
                             Cabinet du Gouvernorat • Fianarantsoa
                         </p>
                     </div>
                 </div>
 
-                <nav v-if="canLogin" class="flex items-center space-x-4">
+                <nav v-if="canLogin" class="flex items-center space-x-3">
                     <Link
                         v-if="$page.props.auth.user"
                         :href="route('dashboard')"
-                        class="px-4 py-2 text-sm font-medium text-white bg-blue-900 rounded-md hover:bg-blue-800 transition shadow"
+                        class="px-4 py-2 text-sm font-medium text-white bg-blue-900 rounded-md hover:bg-blue-800 transition shadow-sm flex items-center space-x-2"
                     >
-                        Mon Tableau de Bord
+                        <span>Tableau de Bord</span>
                     </Link>
 
                     <template v-else>
                         <Link
                             :href="route('login')"
-                            class="px-4 py-2 text-sm font-medium text-blue-900 bg-blue-50 border border-blue-200 rounded-md hover:bg-blue-100 transition"
+                            class="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-md hover:bg-slate-50 transition shadow-sm"
                         >
-                            Connexion Agent
+                            Espace Agent
                         </Link>
 
                         <Link
                             v-if="canRegister"
                             :href="route('register')"
-                            class="px-4 py-2 text-sm font-medium text-white bg-blue-900 rounded-md hover:bg-blue-800 transition shadow"
+                            class="hidden sm:inline-flex px-4 py-2 text-sm font-medium text-white bg-blue-900 rounded-md hover:bg-blue-800 transition shadow-sm"
                         >
-                            Créer un compte
+                            Enregistrement
                         </Link>
                     </template>
                 </nav>
@@ -63,60 +67,85 @@ defineProps({
         </header>
 
         <!-- Contenu Principal / Hero Section -->
-        <main class="flex-grow flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12">
+        <main class="flex-grow flex items-center justify-center px-4 sm:px-6 lg:px-8 py-16">
             <div class="max-w-4xl w-full text-center space-y-8">
-                <div class="inline-flex items-center space-x-2 bg-blue-50 border border-blue-200 px-3 py-1 rounded-full text-xs font-semibold text-blue-900 uppercase tracking-wide">
-                    <span>Madagascar • Fianarantsoa</span>
+
+                <!-- Badge Institutionnel -->
+                <div class="inline-flex items-center space-x-2 bg-slate-100 border border-slate-200 px-4 py-1.5 rounded-full text-xs font-medium text-slate-700">
+                    <span class="text-blue-900 font-bold">Fianarantsoa III</span>
+                    <span class="text-slate-300">•</span>
+                    <span>Plateforme Administrative Sécurisée</span>
                 </div>
 
-                <h2 class="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight">
-                    Portail Numérique de Gestion des Congés & Ressources Humaines
+                <!-- Titre Majeur -->
+                <h2 class="text-3xl sm:text-5xl font-serif font-bold text-slate-900 tracking-tight leading-tight">
+                    Gestion Intégrée des Ressources Humaines & du Personnel
                 </h2>
 
-                <p class="text-lg text-slate-600 max-w-2xl mx-auto">
-                    Plateforme officielle sécurisée dédiée au personnel, aux employés et aux services administratifs du Cabinet de la Région Haute Matsiatra.
+                <!-- Description sobre et professionnelle -->
+                <p class="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+                    Outil numérique officiel dédié à l'accompagnement des agents publics, à l'optimisation du service administratif et au suivi rigoureux des congés au sein de la Région Haute Matsiatra.
                 </p>
 
+                <!-- Bouton d'action principal -->
                 <div class="flex flex-col sm:flex-row justify-center items-center space-y-3 sm:space-y-0 sm:space-x-4 pt-4">
                     <Link
                         v-if="!$page.props.auth.user"
                         :href="route('login')"
-                        class="w-full sm:w-auto px-8 py-3 text-base font-medium text-white bg-blue-900 rounded-lg hover:bg-blue-800 transition shadow-lg text-center"
+                        class="w-full sm:w-auto px-8 py-3.5 text-sm font-semibold text-white bg-blue-900 rounded-lg hover:bg-blue-800 transition shadow-md hover:shadow-lg text-center"
                     >
-                        Accéder à mon espace
+                        Accéder à l'authentification
                     </Link>
                     <Link
                         v-else
                         :href="route('dashboard')"
-                        class="w-full sm:w-auto px-8 py-3 text-base font-medium text-white bg-blue-900 rounded-lg hover:bg-blue-800 transition shadow-lg text-center"
+                        class="w-full sm:w-auto px-8 py-3.5 text-sm font-semibold text-white bg-blue-900 rounded-lg hover:bg-blue-800 transition shadow-md hover:shadow-lg text-center"
                     >
-                        Retourner au Tableau de Bord
+                        Accéder à mon espace de travail
                     </Link>
                 </div>
 
-                <!-- Grille d'informations / Fonctionnalités clés -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-12 text-left">
-                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-                        <div class="text-blue-900 font-bold text-lg mb-2">📄 Suivi Simplifié</div>
-                        <p class="text-sm text-slate-600">Soumettez vos demandes de congés en quelques clics et suivez leur validation en temps réel.</p>
+                <!-- Grille d'engagements / Fonctionnalités clés -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-16 text-left">
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-xs hover:shadow-md transition">
+                        <div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-900 flex items-center justify-center font-bold mb-4 text-base">
+                            01
+                        </div>
+                        <h3 class="font-bold text-slate-900 mb-2">Transparence & Suivi</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">Traitement équitable et traçabilité de l'ensemble des requêtes administratives du personnel.</p>
                     </div>
-                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-                        <div class="text-blue-900 font-bold text-lg mb-2">⚡ Espace RH Efficace</div>
-                        <p class="text-sm text-slate-600">Centralisation de la gestion des dossiers du personnel pour les administrateurs du cabinet.</p>
+
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-xs hover:shadow-md transition">
+                        <div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-900 flex items-center justify-center font-bold mb-4 text-base">
+                            02
+                        </div>
+                        <h3 class="font-bold text-slate-900 mb-2">Efficacité Opérationnelle</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">Centralisation des dossiers pour alléger les processus de validation au niveau de la hiérarchie.</p>
                     </div>
-                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-                        <div class="text-blue-900 font-bold text-lg mb-2">🔒 Sécurité & Fiabilité</div>
-                        <p class="text-sm text-slate-600">Accès restreint, authentification sécurisée et traçabilité de toutes les opérations administratives.</p>
+
+                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-xs hover:shadow-md transition">
+                        <div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-900 flex items-center justify-center font-bold mb-4 text-base">
+                            03
+                        </div>
+                        <h3 class="font-bold text-slate-900 mb-2">Sécurité des Données</h3>
+                        <p class="text-sm text-slate-600 leading-relaxed">Conformité aux normes de protection des informations internes et accès strictement restreint.</p>
                     </div>
                 </div>
+
             </div>
         </main>
 
-        <!-- Pied de page / Footer -->
-        <footer class="bg-white border-t border-slate-200 py-6">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500">
-                <p>&copy; 2026 Région Haute Matsiatra - Fianarantsoa. Tous droits réservés.</p>
-                <p class="mt-2 sm:mt-0">Système Intranet de Gestion Administrative</p>
+        <!-- Pied de page / Footer Institutionnel -->
+        <footer class="bg-white border-t border-slate-200 py-8">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 space-y-4 sm:space-y-0">
+                <div class="flex items-center space-x-2">
+                    <p>&copy; 2026 Région Haute Matsiatra • Fianarantsoa, Madagascar. Tous droits réservés.</p>
+                </div>
+                <div class="flex items-center space-x-6">
+                    <span class="hover:text-slate-800 transition">Direction des Ressources Humaines</span>
+                    <span>•</span>
+                    <span class="hover:text-slate-800 transition">Système Intranet Gouvernemental</span>
+                </div>
             </div>
         </footer>
     </div>
