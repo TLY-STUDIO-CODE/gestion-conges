@@ -1,4 +1,5 @@
 <script setup>
+import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import { Head, Link } from '@inertiajs/vue3';
 
 defineProps({
@@ -12,27 +13,32 @@ defineProps({
 </script>
 
 <template>
-    <Head title="Portail Officiel des Ressources Humaines - Région Haute Matsiatra" />
+    <Head title="Portail Officiel des Ressources Humaines • Région Haute Matsiatra" />
 
-    <div class="min-h-screen bg-slate-50 flex flex-col justify-between text-slate-900 selection:bg-blue-900 selection:text-white">
-        <!-- En-tête / Header Institutionnel -->
-        <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+    <div class="min-h-screen bg-slate-900 text-slate-100 flex flex-col justify-between selection:bg-blue-600 selection:text-white relative overflow-hidden">
+
+        <!-- Éléments de Décoration & Design Pro Max (Arrière-plan lumineux subtil) -->
+        <div class="absolute top-0 left-1/4 w-96 h-96 bg-blue-600/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-indigo-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <!-- En-tête / Header Institutionnel de Haute Précision -->
+        <header class="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
                 <div class="flex items-center space-x-4">
-                    <!-- Sceau / Logo Officiel -->
-                    <div class="w-12 h-12 bg-gradient-to-br from-blue-900 to-slate-900 rounded-lg flex items-center justify-center text-white font-serif font-bold text-xl shadow-inner border border-blue-800">
-                        HM
+                    <!-- Sceau / Logo Officiel depuis le dossier components -->
+                    <div class="w-12 h-12 bg-white/5 border border-slate-700 rounded-xl flex items-center justify-center p-1.5 shadow-inner backdrop-blur-sm">
+                        <ApplicationLogo class="w-full h-full object-contain" />
                     </div>
                     <div>
                         <div class="flex items-center space-x-2">
-                            <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
-                            <span class="text-xs font-bold tracking-widest text-slate-500 uppercase">République de Madagascar</span>
+                            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                            <span class="text-[10px] font-bold tracking-widest text-slate-400 uppercase">République de Madagascar</span>
                         </div>
-                        <h1 class="text-base sm:text-lg font-bold text-slate-900 leading-tight">
+                        <h1 class="text-base sm:text-lg font-bold text-white tracking-tight leading-tight">
                             Région Haute Matsiatra
                         </h1>
-                        <p class="text-xs text-blue-900 font-semibold tracking-wide">
-                            Cabinet du Gouvernorat • Fianarantsoa
+                        <p class="text-xs text-blue-400 font-semibold tracking-wide">
+                            Cabinet du Gouverneur • Fianarantsoa
                         </p>
                     </div>
                 </div>
@@ -41,7 +47,7 @@ defineProps({
                     <Link
                         v-if="$page.props.auth.user"
                         :href="route('dashboard')"
-                        class="px-4 py-2 text-sm font-medium text-white bg-blue-900 rounded-md hover:bg-blue-800 transition shadow-sm flex items-center space-x-2"
+                        class="px-5 py-2.5 text-xs font-bold uppercase tracking-wider text-white bg-blue-600 rounded-lg hover:bg-blue-500 transition shadow-lg shadow-blue-600/20 flex items-center space-x-2 border border-blue-400/30"
                     >
                         <span>Tableau de Bord</span>
                     </Link>
@@ -49,7 +55,7 @@ defineProps({
                     <template v-else>
                         <Link
                             :href="route('login')"
-                            class="px-4 py-2 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-md hover:bg-slate-50 transition shadow-sm"
+                            class="px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-slate-300 bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-700 hover:text-white transition shadow-sm"
                         >
                             Espace Agent
                         </Link>
@@ -57,7 +63,7 @@ defineProps({
                         <Link
                             v-if="canRegister"
                             :href="route('register')"
-                            class="hidden sm:inline-flex px-4 py-2 text-sm font-medium text-white bg-blue-900 rounded-md hover:bg-blue-800 transition shadow-sm"
+                            class="hidden sm:inline-flex px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-white bg-blue-600 rounded-lg hover:bg-blue-500 transition shadow-lg shadow-blue-600/20 border border-blue-400/30"
                         >
                             Enregistrement
                         </Link>
@@ -66,85 +72,85 @@ defineProps({
             </div>
         </header>
 
-        <!-- Contenu Principal / Hero Section -->
-        <main class="flex-grow flex items-center justify-center px-4 sm:px-6 lg:px-8 py-16">
+        <!-- Contenu Principal / Hero Section Ultra Pro Max -->
+        <main class="flex-grow flex items-center justify-center px-4 sm:px-6 lg:px-8 py-16 relative z-10">
             <div class="max-w-4xl w-full text-center space-y-8">
 
-                <!-- Badge Institutionnel -->
-                <div class="inline-flex items-center space-x-2 bg-slate-100 border border-slate-200 px-4 py-1.5 rounded-full text-xs font-medium text-slate-700">
-                    <span class="text-blue-900 font-bold">Fianarantsoa III</span>
-                    <span class="text-slate-300">•</span>
-                    <span>Plateforme Administrative Sécurisée</span>
+                <!-- Badge Institutionnel Dynamique -->
+                <div class="inline-flex items-center space-x-2 bg-slate-800/80 border border-slate-700/80 px-4 py-1.5 rounded-full text-xs font-medium text-slate-300 shadow-sm backdrop-blur-md">
+                    <span class="text-blue-400 font-bold">Fianarantsoa</span>
+                    <span class="text-slate-600">•</span>
+                    <span class="text-slate-300">Portail Administratif Numérique Officiel</span>
                 </div>
 
-                <!-- Titre Majeur -->
-                <h2 class="text-3xl sm:text-5xl font-serif font-bold text-slate-900 tracking-tight leading-tight">
-                    Gestion Intégrée des Ressources Humaines & du Personnel
+                <!-- Titre Majeur Inspirant -->
+                <h2 class="text-3xl sm:text-5xl font-serif font-extrabold text-white tracking-tight leading-tight">
+                    Gestion Simplifiée & Fiable <br class="hidden sm:inline" />des Congés et du Personnel
                 </h2>
 
-                <!-- Description sobre et professionnelle -->
-                <p class="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-                    Outil numérique officiel dédié à l'accompagnement des agents publics, à l'optimisation du service administratif et au suivi rigoureux des congés au sein de la Région Haute Matsiatra.
+                <!-- Description Profonde et Élégante -->
+                <p class="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed font-light">
+                    Plateforme officielle dédiée à la gestion humaine de proximité, au suivi rigoureux des congés et à l'accompagnement quotidien des agents du service public de la Région Haute Matsiatra.
                 </p>
 
-                <!-- Bouton d'action principal -->
+                <!-- Bouton d'action principal Ultra Travaillé -->
                 <div class="flex flex-col sm:flex-row justify-center items-center space-y-3 sm:space-y-0 sm:space-x-4 pt-4">
                     <Link
                         v-if="!$page.props.auth.user"
                         :href="route('login')"
-                        class="w-full sm:w-auto px-8 py-3.5 text-sm font-semibold text-white bg-blue-900 rounded-lg hover:bg-blue-800 transition shadow-md hover:shadow-lg text-center"
+                        class="w-full sm:w-auto px-8 py-4 text-sm font-bold uppercase tracking-wider text-white bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl hover:from-blue-500 hover:to-indigo-500 transition shadow-xl shadow-blue-900/40 border border-blue-400/30 text-center transform hover:-translate-y-0.5 duration-200"
                     >
-                        Accéder à l'authentification
+                        Accéder à l'authentification sécurisée
                     </Link>
                     <Link
                         v-else
                         :href="route('dashboard')"
-                        class="w-full sm:w-auto px-8 py-3.5 text-sm font-semibold text-white bg-blue-900 rounded-lg hover:bg-blue-800 transition shadow-md hover:shadow-lg text-center"
+                        class="w-full sm:w-auto px-8 py-4 text-sm font-bold uppercase tracking-wider text-white bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl hover:from-blue-500 hover:to-indigo-500 transition shadow-xl shadow-blue-900/40 border border-blue-400/30 text-center transform hover:-translate-y-0.5 duration-200"
                     >
                         Accéder à mon espace de travail
                     </Link>
                 </div>
 
-                <!-- Grille d'engagements / Fonctionnalités clés -->
+                <!-- Grille d'engagements / Fonctionnalités Niveau Pro Max -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-16 text-left">
-                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-xs hover:shadow-md transition">
-                        <div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-900 flex items-center justify-center font-bold mb-4 text-base">
+                    <div class="bg-slate-800/50 backdrop-blur-md p-6 rounded-2xl border border-slate-700/80 shadow-lg hover:border-blue-500/50 transition group">
+                        <div class="w-12 h-12 rounded-xl bg-blue-600/20 border border-blue-500/30 text-blue-400 flex items-center justify-center font-extrabold mb-4 text-base group-hover:scale-110 transition">
                             01
                         </div>
-                        <h3 class="font-bold text-slate-900 mb-2">Transparence & Suivi</h3>
-                        <p class="text-sm text-slate-600 leading-relaxed">Traitement équitable et traçabilité de l'ensemble des requêtes administratives du personnel.</p>
+                        <h3 class="font-bold text-white mb-2 text-base">Transparence & Suivi</h3>
+                        <p class="text-sm text-slate-400 leading-relaxed font-light">Traitement fluide, équitable et traçabilité absolue de l'ensemble des requêtes de congés du personnel.</p>
                     </div>
 
-                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-xs hover:shadow-md transition">
-                        <div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-900 flex items-center justify-center font-bold mb-4 text-base">
+                    <div class="bg-slate-800/50 backdrop-blur-md p-6 rounded-2xl border border-slate-700/80 shadow-lg hover:border-blue-500/50 transition group">
+                        <div class="w-12 h-12 rounded-xl bg-blue-600/20 border border-blue-500/30 text-blue-400 flex items-center justify-center font-extrabold mb-4 text-base group-hover:scale-110 transition">
                             02
                         </div>
-                        <h3 class="font-bold text-slate-900 mb-2">Efficacité Opérationnelle</h3>
-                        <p class="text-sm text-slate-600 leading-relaxed">Centralisation des dossiers pour alléger les processus de validation au niveau de la hiérarchie.</p>
+                        <h3 class="font-bold text-white mb-2 text-base">Efficacité Opérationnelle</h3>
+                        <p class="text-sm text-slate-400 leading-relaxed font-light">Centralisation rigoureuse des dossiers administratifs pour fluidifier les validations hiérarchiques.</p>
                     </div>
 
-                    <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-xs hover:shadow-md transition">
-                        <div class="w-10 h-10 rounded-lg bg-blue-50 text-blue-900 flex items-center justify-center font-bold mb-4 text-base">
+                    <div class="bg-slate-800/50 backdrop-blur-md p-6 rounded-2xl border border-slate-700/80 shadow-lg hover:border-blue-500/50 transition group">
+                        <div class="w-12 h-12 rounded-xl bg-blue-600/20 border border-blue-500/30 text-blue-400 flex items-center justify-center font-extrabold mb-4 text-base group-hover:scale-110 transition">
                             03
                         </div>
-                        <h3 class="font-bold text-slate-900 mb-2">Sécurité des Données</h3>
-                        <p class="text-sm text-slate-600 leading-relaxed">Conformité aux normes de protection des informations internes et accès strictement restreint.</p>
+                        <h3 class="font-bold text-white mb-2 text-base">Sécurité de Pointe</h3>
+                        <p class="text-sm text-slate-400 leading-relaxed font-light">Protection renforcée des données internes, conformité normative et accès strictement contrôlé.</p>
                     </div>
                 </div>
 
             </div>
         </main>
 
-        <!-- Pied de page / Footer Institutionnel -->
-        <footer class="bg-white border-t border-slate-200 py-8">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 space-y-4 sm:space-y-0">
+        <!-- Pied de page / Footer Institutionnel Pro Max -->
+        <footer class="bg-slate-900 border-t border-slate-800 py-8 relative z-10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 space-y-4 sm:space-y-0">
                 <div class="flex items-center space-x-2">
                     <p>&copy; 2026 Région Haute Matsiatra • Fianarantsoa, Madagascar. Tous droits réservés.</p>
                 </div>
                 <div class="flex items-center space-x-6">
-                    <span class="hover:text-slate-800 transition">Direction des Ressources Humaines</span>
-                    <span>•</span>
-                    <span class="hover:text-slate-800 transition">Système Intranet Gouvernemental</span>
+                    <span class="hover:text-white transition cursor-pointer">Direction des Ressources Humaines</span>
+                    <span class="text-slate-700">•</span>
+                    <span class="hover:text-white transition cursor-pointer">Système Intranet Gouvernemental</span>
                 </div>
             </div>
         </footer>
