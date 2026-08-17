@@ -26,69 +26,113 @@ const rejectRequest = (id) => {
 
     <AuthenticatedLayout>
         <template #header>
-            <div class="flex justify-between items-center">
-                <h2 class="font-semibold text-xl text-gray-800 leading-tight">Espace RH : Validation des Congés</h2>
-                <Link :href="route('leave-requests.index')" class="px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700 transition">
-                    Voir l'historique global
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h2 class="font-bold text-2xl text-gray-900 tracking-tight">Espace RH : Validation des Congés</h2>
+                    <p class="text-sm text-gray-500 mt-0.5">Traitez rapidement les demandes de congés en attente de validation.</p>
+                </div>
+                <Link :href="route('leave-requests.index')" class="inline-flex items-center space-x-2 px-4 py-2.5 bg-white hover:bg-gray-50 text-gray-700 font-medium text-sm rounded-xl border border-gray-200 shadow-xs transition-all duration-150">
+                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    <span>Voir l'historique global</span>
                 </Link>
             </div>
         </template>
 
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="py-10">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-6">
 
-                <!-- Message Flash de succès ou d'erreur sécurisé -->
-                <div v-if="flash.success" class="mb-4 bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative">
-                    {{ flash.success }}
-                </div>
-                <div v-if="flash.error" class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
-                    {{ flash.error }}
+                <!-- Message Flash de succès sécurisé -->
+                <div v-if="flash.success" class="bg-emerald-50 border border-emerald-200 text-emerald-800 p-4 rounded-2xl shadow-xs flex items-center space-x-3" role="alert">
+                    <svg class="w-5 h-5 text-emerald-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                    <span class="text-sm font-medium">{{ flash.success }}</span>
                 </div>
 
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
-                    <h3 class="text-lg font-medium text-gray-900 mb-4">Demandes nécessitant une action ({{ pendingRequests?.length || 0 }})</h3>
+                <!-- Message Flash d'erreur sécurisé -->
+                <div v-if="flash.error" class="bg-rose-50 border border-rose-200 text-rose-800 p-4 rounded-2xl shadow-xs flex items-center space-x-3" role="alert">
+                    <svg class="w-5 h-5 text-rose-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                    <span class="text-sm font-medium">{{ flash.error }}</span>
+                </div>
 
-                    <div v-if="!pendingRequests || pendingRequests.length === 0" class="text-gray-500 italic py-4">
-                        Aucune demande en attente pour le moment. Bon travail !
+                <!-- Contenu principal -->
+                <div class="bg-white rounded-2xl border border-gray-100 shadow-xs overflow-hidden p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h3 class="font-bold text-lg text-gray-900 tracking-tight">Demandes nécessitant une action</h3>
+                            <p class="text-xs text-gray-400 mt-0.5">{{ pendingRequests?.length || 0 }} requête(s) en attente de décision</p>
+                        </div>
                     </div>
 
-                    <table v-else class="min-w-full divide-y divide-gray-200">
-                        <thead>
-                            <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Employé</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Type</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Période</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Durée</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Motif</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Décision</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            <tr v-for="req in pendingRequests" :key="req.id">
-                                <td class="px-6 py-4 whitespace-nowrap font-medium text-gray-900">
-                                    {{ req.employee ? req.employee.first_name + ' ' + req.employee.last_name : 'N/A' }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-gray-500">
-                                    {{ req.leave_type ? req.leave_type.name : 'N/A' }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    {{ req.start_date }} au {{ req.end_date }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-bold">
-                                    {{ req.days_count }} j
-                                </td>
-                                <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate">
-                                    {{ req.reason || 'Aucun motif' }}
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
-                                    <button @click="approveRequest(req.id)" class="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 transition">Approuver</button>
-                                    <button @click="rejectRequest(req.id)" class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition">Rejeter</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div v-if="!pendingRequests || pendingRequests.length === 0" class="text-center py-12">
+                        <svg class="w-12 h-12 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <p class="text-gray-500 text-sm font-medium">Aucune demande en attente pour le moment. Bon travail !</p>
+                    </div>
+
+                    <div v-else class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-100">
+                            <thead>
+                                <tr class="bg-gray-50/50 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                                    <th class="py-3.5 px-6">Employé</th>
+                                    <th class="py-3.5 px-6">Type</th>
+                                    <th class="py-3.5 px-6">Période</th>
+                                    <th class="py-3.5 px-6">Durée</th>
+                                    <th class="py-3.5 px-6">Motif</th>
+                                    <th class="py-3.5 px-6 text-right">Décision</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-50 text-sm">
+                                <tr v-for="req in pendingRequests" :key="req.id" class="hover:bg-gray-50/50 transition-colors">
+                                    <!-- Employé -->
+                                    <td class="py-4 px-6 whitespace-nowrap">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-8 h-8 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-xs flex-shrink-0">
+                                                {{ req.employee && req.employee.first_name ? req.employee.first_name.charAt(0) : '' }}{{ req.employee && req.employee.last_name ? req.employee.last_name.charAt(0) : '' }}
+                                            </div>
+                                            <span class="font-semibold text-gray-900">
+                                                {{ req.employee ? req.employee.first_name + ' ' + req.employee.last_name : 'N/A' }}
+                                            </span>
+                                        </div>
+                                    </td>
+
+                                    <!-- Type -->
+                                    <td class="py-4 px-6 whitespace-nowrap text-gray-600 font-medium">
+                                        {{ req.leave_type ? req.leave_type.name : 'N/A' }}
+                                    </td>
+
+                                    <!-- Période -->
+                                    <td class="py-4 px-6 whitespace-nowrap text-xs text-gray-500">
+                                        <span class="font-medium text-gray-800">{{ req.start_date }}</span> <span class="text-gray-400 mx-1">au</span> <span class="font-medium text-gray-800">{{ req.end_date }}</span>
+                                    </td>
+
+                                    <!-- Durée -->
+                                    <td class="py-4 px-6 whitespace-nowrap text-gray-900 font-bold">
+                                        {{ req.days_count }} <span class="text-xs font-normal text-gray-500">j</span>
+                                    </td>
+
+                                    <!-- Motif -->
+                                    <td class="py-4 px-6 text-gray-500 max-w-xs truncate text-xs">
+                                        {{ req.reason || 'Aucun motif' }}
+                                    </td>
+
+                                    <!-- Décision / Actions -->
+                                    <td class="py-4 px-6 whitespace-nowrap text-right font-medium">
+                                        <div class="inline-flex items-center justify-end space-x-2">
+                                            <button @click="approveRequest(req.id)" class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-xl text-xs font-semibold transition border border-emerald-200/60 shadow-xs flex items-center space-x-1">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
+                                                <span>Approuver</span>
+                                            </button>
+                                            <button @click="rejectRequest(req.id)" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-xl text-xs font-semibold transition border border-rose-200/60 shadow-xs flex items-center space-x-1">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                                <span>Rejeter</span>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
                 </div>
+
             </div>
         </div>
     </AuthenticatedLayout>
