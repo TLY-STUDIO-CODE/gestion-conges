@@ -22,20 +22,8 @@ jobs:
           extensions: mbstring, xml, ctype, iconv, intl, pdo_pgsql, sqlite3
           coverage: none
 
-      - name: 📦 Get Composer Cache Directory
-        id: composer-cache
-        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-      - name:  Cache Composer Dependencies
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
-
-      - name: 📥 Install PHP Dependencies (Clean install)
-        run: composer install --prefer-dist --no-progress --no-interaction --ansi
+      - name: 📥 Install PHP Dependencies (Composer Update Safe)
+        run: composer update --prefer-dist --no-progress --no-interaction --ansi
 
       - name: ⚙️ Setup Node.js & NPM
         uses: actions/setup-node@v4
@@ -54,7 +42,7 @@ jobs:
 
       - name: 🧪 Run Backend Tests (PHPUnit)
         run: |
-          cp .env.example .env || cp .env.ci .env
+          cp .env.example .env
           php artisan key:generate --ansi
           php artisan test --ansi
         env:
