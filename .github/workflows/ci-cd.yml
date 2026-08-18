@@ -6,7 +6,6 @@ on:
   pull_request:
     branches: [ "main", "master" ]
 
-# Permet de supprimer les avertissements de dépréciation des runners GitHub Actions
 env:
   ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
 
@@ -26,8 +25,8 @@ jobs:
           extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, sqlite3
           coverage: none
 
-      - name: 📥 Install PHP Dependencies
-        run: composer install --prefer-dist --no-progress --no-interaction --ansi
+      - name: 📥 Install & Update PHP Dependencies (Composer)
+        run: composer update --prefer-dist --no-progress --no-interaction --ansi
 
       - name: ⚙️ Setup Node.js 22 & NPM
         uses: actions/setup-node@v4
