@@ -19,16 +19,16 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
-          extensions: mbstring, xml, ctype, iconv, intl, pdo_pgsql, sqlite3
+          extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, sqlite3
           coverage: none
 
       - name: 📥 Install PHP Dependencies (Composer Update Safe)
         run: composer update --prefer-dist --no-progress --no-interaction --ansi
 
-      - name: ⚙️ Setup Node.js & NPM
+      - name: ⚙️ Setup Node.js 22 & NPM
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
           cache: 'npm'
 
       - name: 📥 Install Node Dependencies
@@ -42,10 +42,11 @@ jobs:
 
       - name: 🧪 Run Backend Tests (PHPUnit)
         run: |
-          cp .env.example .env
+          cp .env.example .env || cp .env.ci .env
           php artisan key:generate --ansi
           php artisan test --ansi
         env:
+          APP_ENV: testing
           DB_CONNECTION: sqlite
           DB_DATABASE: ':memory:'
 
@@ -58,10 +59,10 @@ jobs:
       - name: 📥 Checkout Repository
         uses: actions/checkout@v4
 
-      - name: ⚙️ Setup Node.js
+      - name: ⚙️ Setup Node.js 22
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '22'
 
       - name: 📥 Install Dependencies
         run: npm ci
