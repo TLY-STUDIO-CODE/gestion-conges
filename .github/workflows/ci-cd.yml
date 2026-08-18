@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [ "main", "master" ]
 
+# Permet de supprimer les avertissements de dépréciation des runners GitHub Actions
+env:
+  ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
+
 jobs:
   quality-and-test:
     name: 🛡️ Code Quality & Automated Testing (PHP 8.3)
@@ -22,8 +26,8 @@ jobs:
           extensions: mbstring, xml, ctype, iconv, intl, pdo_sqlite, sqlite3
           coverage: none
 
-      - name: 📥 Install PHP Dependencies (Composer Update Safe)
-        run: composer update --prefer-dist --no-progress --no-interaction --ansi
+      - name: 📥 Install PHP Dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction --ansi
 
       - name: ⚙️ Setup Node.js 22 & NPM
         uses: actions/setup-node@v4
@@ -42,13 +46,14 @@ jobs:
 
       - name: 🧪 Run Backend Tests (PHPUnit)
         run: |
-          cp .env.example .env || cp .env.ci .env
+          cp .env.example .env
           php artisan key:generate --ansi
+          touch database/database.sqlite
           php artisan test --ansi
         env:
           APP_ENV: testing
           DB_CONNECTION: sqlite
-          DB_DATABASE: ':memory:'
+          DB_DATABASE: database/database.sqlite
 
   end-to-end-tests:
     name: 🌐 End-to-End & Compatibility Testing
