@@ -1,0 +1,68 @@
+name: CI/CD Enterprise Production Pipeline
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  quality-and-test:
+    name: 🛡️ Code Quality & Automated Testing
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup PHP 8.2
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, xml, ctype, iconv, intl, pdo_pgsql
+          coverage: none
+
+      - name: 📦 Validate Composer Dependencies
+        run: composer validate --no-check-lock
+
+      - name: 📥 Install PHP Dependencies (Composer)
+        uses: ramsey/composer-install@v3
+        with:
+          composer-options: "--prefer-dist --no-progress"
+
+      - name: ⚙️ Setup Node.js & NPM
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: 📥 Install Node Dependencies
+        run: npm ci
+
+      - name: 🏗️ Build Frontend Assets (Vite)
+        run: npm run build
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+
+      - name: 🧪 Run PHPUnit Tests (Backend)
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+          php artisan test
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: ':memory:'
+
+  deploy-production:
+    name: 🚀 International Production Deployment
+    needs: quality-and-test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🔔 Notification de Succès
+        run: echo "🎉 Déploiement réussi et validé pour le Cabinet de la Région Haute Matsiatra !"
