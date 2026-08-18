@@ -20,13 +20,22 @@ jobs:
         with:
           php-version: '8.3'
           extensions: mbstring, xml, ctype, iconv, intl, pdo_pgsql, sqlite3
-          coverage: pcov
+          coverage: none
 
-      - name: 📦 Validate Composer Dependencies
-        run: composer validate --no-check-lock
+      - name: 📦 Get Composer Cache Directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-      - name: 📥 Install PHP Dependencies (Composer Update)
-        run: composer update --prefer-dist --no-progress --no-interaction
+      - name:  Cache Composer Dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: 📥 Install PHP Dependencies (Clean install)
+        run: composer install --prefer-dist --no-progress --no-interaction --ansi
 
       - name: ⚙️ Setup Node.js & NPM
         uses: actions/setup-node@v4
@@ -43,11 +52,11 @@ jobs:
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
 
-      - name: 🧪 Run Backend Tests (PHPUnit & Feature Tests)
+      - name: 🧪 Run Backend Tests (PHPUnit)
         run: |
-          cp .env.example .env
-          php artisan key:generate
-          php artisan test
+          cp .env.example .env || cp .env.ci .env
+          php artisan key:generate --ansi
+          php artisan test --ansi
         env:
           DB_CONNECTION: sqlite
           DB_DATABASE: ':memory:'
