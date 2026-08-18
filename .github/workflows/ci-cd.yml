@@ -25,10 +25,8 @@ jobs:
       - name: 📦 Validate Composer Dependencies
         run: composer validate --no-check-lock
 
-      - name: 📥 Install PHP Dependencies (Composer)
-        uses: ramsey/composer-install@v3
-        with:
-          composer-options: "--prefer-dist --no-progress"
+      - name: 📥 Install PHP Dependencies (Composer Update)
+        run: composer update --prefer-dist --no-progress --no-interaction
 
       - name: ⚙️ Setup Node.js & NPM
         uses: actions/setup-node@v4
