@@ -4,63 +4,45 @@ import { Head } from '@inertiajs/vue3';
 </script>
 
 <template>
-    <Head title="Tableau de Bord • Espace Agent" />
+    <Head title="Tableau de Bord • Espace Collaborateur" />
 
     <AuthenticatedLayout>
         <template #header>
-            <div class="flex items-center justify-between">
-                <div>
-                    <h2 class="text-xl font-bold text-slate-900 tracking-tight">
-                        Tableau de Bord
-                    </h2>
-                    <p class="text-xs text-slate-500 mt-0.5">Vue d'ensemble de votre espace collaboratif et de gestion des ressources humaines.</p>
-                </div>
-                <div class="hidden sm:flex items-center space-x-2 bg-slate-100 border border-slate-200/80 px-3 py-1.5 rounded-xl text-xs font-medium text-slate-600">
-                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                    <span>Session active • Haute Matsiatra</span>
-                </div>
-            </div>
+            <h2 class="text-2xl font-bold text-slate-950">Tableau de Bord</h2>
+            <p class="text-sm text-slate-500">Bienvenue dans votre environnement de travail numérique.</p>
         </template>
 
         <div class="py-10">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8 space-y-6">
-                <!-- Carte principale de bienvenue -->
-                <div class="bg-white border border-slate-200/80 shadow-xs sm:rounded-2xl overflow-hidden">
-                    <div class="p-6 sm:p-8 flex items-center justify-between">
-                        <div class="space-y-2">
-                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-100">
-                                Statut : Connecté
-                            </span>
-                            <h3 class="text-lg font-bold text-slate-900">Bienvenue sur votre portail opérationnel</h3>
-                            <p class="text-sm text-slate-600 max-w-xl">
-                                Vous êtes authentifié avec succès sur le système de gestion des congés et du personnel de la Région Haute Matsiatra.
-                            </p>
-                        </div>
-                        <div class="hidden md:flex flex-col items-end justify-center">
-                            <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Environnement</span>
-                            <span class="text-sm font-bold text-slate-700">Intranet v4.2 Sécurisé</span>
-                        </div>
+            <div class="max-w-7xl mx-auto px-6 space-y-8">
+
+                <!-- Carte Bienvenue -->
+                <div class="bg-slate-900 text-white p-10 rounded-3xl flex items-center justify-between shadow-2xl">
+                    <div class="max-w-xl">
+                        <h3 class="text-2xl font-bold mb-3">Espace Opérationnel • Haute Matsiatra</h3>
+                        <p class="text-slate-400">Accédez à l'ensemble de vos outils RH, gérez vos congés et consultez votre historique professionnel.</p>
+                    </div>
+                    <div class="text-right">
+                        <div class="text-xs font-bold uppercase tracking-wider text-slate-500">Statut</div>
+                        <div class="text-emerald-400 font-bold text-lg">Session Active</div>
                     </div>
                 </div>
 
-                <!-- Grille d'indicateurs rapides / Aperçu SaaS -->
+                <!-- Indicateurs -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="bg-white border border-slate-200/80 shadow-xs sm:rounded-2xl p-6">
-                        <div class="text-xs font-bold uppercase tracking-wider text-slate-400">Solde de congés</div>
-                        <div class="text-2xl font-extrabold text-slate-900 mt-2">En cours</div>
-                        <p class="text-xs text-slate-500 mt-1">Consultez vos droits et demandes en cours.</p>
+                    <div class="bg-white border border-slate-100 p-8 rounded-3xl shadow-sm">
+                        <div class="text-xs font-bold text-slate-400 uppercase tracking-widest">Temps</div>
+                        <div class="text-3xl font-extrabold mt-3">Gestion des Congés</div>
+                        <div class="mt-4 text-sm text-slate-500">Visualisez votre solde et soumettez vos requêtes.</div>
                     </div>
-
-                    <div class="bg-white border border-slate-200/80 shadow-xs sm:rounded-2xl p-6">
-                        <div class="text-xs font-bold uppercase tracking-wider text-slate-400">Dossier Administratif</div>
-                        <div class="text-2xl font-extrabold text-emerald-600 mt-2">À jour</div>
-                        <p class="text-xs text-slate-500 mt-1">Informations de profil vérifiées par la DRH.</p>
+                    <div class="bg-white border border-slate-100 p-8 rounded-3xl shadow-sm">
+                        <div class="text-xs font-bold text-slate-400 uppercase tracking-widest">Pôle RH</div>
+                        <div class="text-3xl font-extrabold mt-3 text-emerald-600">Dossier à jour</div>
+                        <div class="mt-4 text-sm text-slate-500">Vos informations sont conformes.</div>
                     </div>
-
-                    <div class="bg-white border border-slate-200/80 shadow-xs sm:rounded-2xl p-6">
-                        <div class="text-xs font-bold uppercase tracking-wider text-slate-400">Sécurité & Accès</div>
-                        <div class="text-2xl font-extrabold text-blue-600 mt-2">Protégé</div>
-                        <p class="text-xs text-slate-500 mt-1">Chiffrement SSL et authentification active.</p>
+                    <div class="bg-white border border-slate-100 p-8 rounded-3xl shadow-sm">
+                        <div class="text-xs font-bold text-slate-400 uppercase tracking-widest">Intranet</div>
+                        <div class="text-3xl font-extrabold mt-3 text-blue-600">Sécurisé v4.2</div>
+                        <div class="mt-4 text-sm text-slate-500">Connexion chiffrée et protégée.</div>
                     </div>
                 </div>
             </div>
