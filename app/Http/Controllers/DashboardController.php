@@ -18,7 +18,6 @@ class DashboardController extends Controller
             $adminEmployee = $user->employee;
             $adminLeaveBalance = $adminEmployee ? $adminEmployee->remaining_leave_days : 30;
 
-            // Correction : Remplacez 'role' par le nom exact de votre colonne en base de données si nécessaire (ex: 'type', 'is_admin')
             $totalAdmins = User::where('role', 'admin')->count();
 
             return Inertia::render('Dashboard/AdminDashboard', [
@@ -33,7 +32,8 @@ class DashboardController extends Controller
             ]);
         }
 
-        $employee = $user->employee;
+        // Correction : Charger explicitement la relation 'department' pour l'employé connecté
+        $employee = $user->employee ? $user->employee()->with('department')->first() : null;
 
         return Inertia::render('Dashboard/EmployeeDashboard', [
             'employee' => $employee,

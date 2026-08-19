@@ -45,7 +45,7 @@ class EmployeeWebController extends Controller
 
             // 2. Association du profil employé avec le compte utilisateur créé
             $validatedData['user_id'] = $user->id;
-            $validatedData['leave_balance'] = 25; // Solde initial par défaut
+            $validatedData['leave_balance'] = 30; // Solde initial par défaut
 
             Employee::create($validatedData);
         });

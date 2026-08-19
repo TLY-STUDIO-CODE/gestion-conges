@@ -11,29 +11,25 @@ const props = defineProps({
 const page = usePage();
 const authUser = computed(() => page.props.auth.user);
 
-// Récupération sécurisée du nom (employé ou utilisateur connecté)
 const employeeName = computed(() => {
     return props.employee?.name || authUser.value?.name || 'Collaborateur';
 });
 
-// Récupération sécurisée du nom de l'entreprise B2B (Tenant / Organisation)
 const tenantCompanyName = computed(() => {
     return props.employee?.company?.name || page.props.auth.company?.name || authUser.value?.company_name || 'Espace Entreprise';
 });
 
-// Récupération sécurisée de la région (dynamique pour le SaaS B2B)
 const employeeRegion = computed(() => {
     return props.employee?.region || props.employee?.company?.region || 'Madagascar';
 });
 
-// Récupération sécurisée du département (relation objet ou texte direct)
+// Correction : Évite d'afficher "Informatique & Tech" par défaut si le département est vide
 const employeeDepartment = computed(() => {
     if (!props.employee) return 'Non assigné';
     if (typeof props.employee.department === 'string') return props.employee.department;
-    return props.employee.department?.name || props.employee.service || 'Informatique & Tech';
+    return props.employee.department?.name || props.employee.service || 'Non assigné';
 });
 
-// Horloge en temps réel automatique
 const currentDateTime = ref('');
 let timer = null;
 
@@ -59,7 +55,6 @@ onUnmounted(() => {
     clearInterval(timer);
 });
 
-// Calculs automatiques des compteurs basés sur les demandes de l'employé
 const pendingCount = computed(() => {
     return props.myRequests ? props.myRequests.filter(r => r.status === 'en_attente').length : 0;
 });
@@ -103,7 +98,6 @@ const totalRequestsCount = computed(() => {
         <div class="py-10">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 space-y-8">
 
-                <!-- Alerte si le compte user n'est pas lié à un profil employé -->
                 <div v-if="!employee" class="bg-amber-50 border border-amber-200 text-amber-800 p-4 rounded-2xl shadow-sm flex items-start space-x-3" role="alert">
                     <svg class="w-5 h-5 text-amber-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
                     <div>
@@ -112,13 +106,8 @@ const totalRequestsCount = computed(() => {
                     </div>
                 </div>
 
-                <!-- Contenu principal si l'employé existe -->
                 <template v-else>
-
-                    <!-- Ligne 1 : Informations Profil & Temps -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-
-                        <!-- Nom du Collaborateur -->
                         <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-xs hover:shadow-md transition-all flex flex-col justify-between">
                             <div>
                                 <div class="flex items-center justify-between mb-3">
@@ -135,7 +124,6 @@ const totalRequestsCount = computed(() => {
                             </div>
                         </div>
 
-                        <!-- Date d'embauche -->
                         <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-xs hover:shadow-md transition-all flex flex-col justify-between">
                             <div>
                                 <div class="flex items-center justify-between mb-3">
@@ -150,7 +138,6 @@ const totalRequestsCount = computed(() => {
                             </div>
                         </div>
 
-                        <!-- Département -->
                         <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-xs hover:shadow-md transition-all flex flex-col justify-between">
                             <div>
                                 <div class="flex items-center justify-between mb-3">
@@ -164,13 +151,9 @@ const totalRequestsCount = computed(() => {
                                 <span class="font-medium text-gray-700 truncate max-w-[150px]">{{ employeeRegion }}</span>
                             </div>
                         </div>
-
                     </div>
 
-                    <!-- Ligne 2 : Solde & Horloge Système -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-
-                        <!-- Solde de congés payés -->
                         <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-xs hover:shadow-md transition-all flex flex-col justify-between">
                             <div>
                                 <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">Solde de congés payés</span>
@@ -185,7 +168,6 @@ const totalRequestsCount = computed(() => {
                             </div>
                         </div>
 
-                        <!-- Date et Heure Automatique -->
                         <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-xs hover:shadow-md transition-all flex flex-col justify-between">
                             <div>
                                 <div class="flex items-center justify-between">
@@ -203,7 +185,6 @@ const totalRequestsCount = computed(() => {
                             </div>
                         </div>
 
-                        <!-- Total Demandes -->
                         <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-xs hover:shadow-md transition-all flex flex-col justify-between">
                             <div>
                                 <span class="text-xs font-semibold uppercase tracking-wider text-gray-400">Total Demandes</span>
@@ -214,13 +195,9 @@ const totalRequestsCount = computed(() => {
                                 <span class="font-medium text-gray-600">Toutes périodes</span>
                             </div>
                         </div>
-
                     </div>
 
-                    <!-- Ligne 3 : Statistiques des Demandes -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-
-                        <!-- En attente -->
                         <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-xs hover:shadow-md transition-all flex flex-col justify-between">
                             <div>
                                 <span class="text-xs font-semibold uppercase tracking-wider text-amber-600/80">En attente</span>
@@ -231,7 +208,6 @@ const totalRequestsCount = computed(() => {
                             </div>
                         </div>
 
-                        <!-- Approuvées -->
                         <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-xs hover:shadow-md transition-all flex flex-col justify-between">
                             <div>
                                 <span class="text-xs font-semibold uppercase tracking-wider text-emerald-600/80">Approuvées</span>
@@ -242,7 +218,6 @@ const totalRequestsCount = computed(() => {
                             </div>
                         </div>
 
-                        <!-- Rejetées -->
                         <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-xs hover:shadow-md transition-all flex flex-col justify-between">
                             <div>
                                 <span class="text-xs font-semibold uppercase tracking-wider text-rose-600/80">Rejetées</span>
@@ -252,12 +227,9 @@ const totalRequestsCount = computed(() => {
                                 Refusées ou archivées
                             </div>
                         </div>
-
                     </div>
-
                 </template>
 
-                <!-- Historique des demandes personnelles -->
                 <div class="bg-white rounded-2xl border border-gray-100 shadow-xs p-6 mt-6">
                     <div class="flex items-center justify-between mb-6">
                         <h3 class="font-bold text-lg text-gray-900 tracking-tight">Historique de mes demandes</h3>
