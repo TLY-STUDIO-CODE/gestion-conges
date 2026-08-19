@@ -24,74 +24,80 @@ const form = useForm({
 
 <template>
     <section>
-        <header>
-            <h2 class="text-lg font-medium text-gray-900">
-                Profile Information
-            </h2>
-
-            <p class="mt-1 text-sm text-gray-600">
-                Update your account's profile information and email address.
-            </p>
+        <header class="border-b border-gray-100 pb-4 mb-6">
+            <div class="flex items-center space-x-3">
+                <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
+                </div>
+                <div>
+                    <h2 class="text-base font-bold text-gray-900 tracking-tight">
+                        Informations du Profil
+                    </h2>
+                    <p class="text-xs text-gray-500 mt-0.5">
+                        Mettez à jour les informations personnelles et l'adresse e-mail de votre compte.
+                    </p>
+                </div>
+            </div>
         </header>
 
         <form
             @submit.prevent="form.patch(route('profile.update'))"
-            class="mt-6 space-y-6"
+            class="space-y-5"
         >
             <div>
-                <InputLabel for="name" value="Name" />
+                <InputLabel for="name" value="Nom complet" class="text-xs font-semibold uppercase tracking-wider text-gray-600 mb-1" />
 
                 <TextInput
                     id="name"
                     type="text"
-                    class="mt-1 block w-full"
+                    class="mt-1 block w-full rounded-xl border-gray-200 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 text-sm py-2.5"
                     v-model="form.name"
                     required
                     autofocus
                     autocomplete="name"
                 />
 
-                <InputError class="mt-2" :message="form.errors.name" />
+                <InputError class="mt-1.5 text-xs text-rose-600" :message="form.errors.name" />
             </div>
 
             <div>
-                <InputLabel for="email" value="Email" />
+                <InputLabel for="email" value="Adresse E-mail" class="text-xs font-semibold uppercase tracking-wider text-gray-600 mb-1" />
 
                 <TextInput
                     id="email"
                     type="email"
-                    class="mt-1 block w-full"
+                    class="mt-1 block w-full rounded-xl border-gray-200 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 text-sm py-2.5"
                     v-model="form.email"
                     required
                     autocomplete="username"
                 />
 
-                <InputError class="mt-2" :message="form.errors.email" />
+                <InputError class="mt-1.5 text-xs text-rose-600" :message="form.errors.email" />
             </div>
 
-            <div v-if="mustVerifyEmail && user.email_verified_at === null">
-                <p class="mt-2 text-sm text-gray-800">
-                    Your email address is unverified.
+            <div v-if="mustVerifyEmail && user.email_verified_at === null" class="bg-amber-50 border border-amber-200/60 p-4 rounded-xl">
+                <p class="text-xs text-amber-800 leading-relaxed">
+                    Votre adresse e-mail n'est pas vérifiée.
                     <Link
                         :href="route('verification.send')"
                         method="post"
                         as="button"
-                        class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                        class="font-semibold text-indigo-600 underline hover:text-indigo-800 focus:outline-none ml-1"
                     >
-                        Click here to re-send the verification email.
+                        Cliquez ici pour renvoyer l'e-mail de vérification.
                     </Link>
                 </p>
 
                 <div
                     v-show="status === 'verification-link-sent'"
-                    class="mt-2 text-sm font-medium text-green-600"
+                    class="mt-2 text-xs font-medium text-emerald-600 flex items-center space-x-1"
                 >
-                    A new verification link has been sent to your email address.
+                    <span>Un nouveau lien de vérification a été envoyé à votre adresse e-mail.</span>
                 </div>
             </div>
 
-            <div class="flex items-center gap-4">
-                <PrimaryButton :disabled="form.processing">Save</PrimaryButton>
+            <div class="flex items-center gap-4 pt-2">
+                <PrimaryButton class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 rounded-xl font-medium text-sm shadow-sm transition-all" :disabled="form.processing">Enregistrer</PrimaryButton>
 
                 <Transition
                     enter-active-class="transition ease-in-out"
@@ -101,9 +107,9 @@ const form = useForm({
                 >
                     <p
                         v-if="form.recentlySuccessful"
-                        class="text-sm text-gray-600"
+                        class="text-xs font-medium text-emerald-600 flex items-center space-x-1"
                     >
-                        Saved.
+                        <span>Modifications enregistrées.</span>
                     </p>
                 </Transition>
             </div>
