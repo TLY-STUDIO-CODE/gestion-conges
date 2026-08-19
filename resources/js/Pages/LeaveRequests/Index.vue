@@ -50,12 +50,30 @@ const deleteRequest = (id) => {
 
         <div class="py-10">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white rounded-2xl border border-gray-100 shadow-xs overflow-hidden">
+                <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden p-8">
 
-                    <div class="overflow-x-auto">
+                    <!-- En-tête de la carte interne -->
+                    <div class="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
+                        <div>
+                            <h3 class="font-bold text-lg text-gray-900 tracking-tight">Historique et requêtes</h3>
+                            <p class="text-xs text-gray-500 mt-0.5">{{ leaveRequests?.length || 0 }} demande(s) enregistrée(s)</p>
+                        </div>
+                    </div>
+
+                    <!-- État vide (Empty State) -->
+                    <div v-if="!leaveRequests || leaveRequests.length === 0" class="text-center py-16">
+                        <div class="w-16 h-16 bg-gray-50 rounded-2xl flex items-center justify-center mx-auto mb-4 border border-gray-100 shadow-sm">
+                            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        </div>
+                        <p class="text-gray-900 font-semibold text-base">Aucune demande de congé</p>
+                        <p class="text-gray-500 text-sm mt-1">Commencez par créer une nouvelle demande en haut à droite.</p>
+                    </div>
+
+                    <!-- Tableau des données -->
+                    <div v-else class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-100">
                             <thead>
-                                <tr class="bg-gray-50/50 text-left text-xs font-semibold text-gray-400 uppercase tracking-wider">
+                                <tr class="bg-gray-50/50 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
                                     <th class="py-3.5 px-6">Employé</th>
                                     <th class="py-3.5 px-6">Type</th>
                                     <th class="py-3.5 px-6">Du / Au</th>
@@ -67,17 +85,26 @@ const deleteRequest = (id) => {
                             <tbody class="divide-y divide-gray-50 text-sm">
                                 <tr v-for="req in leaveRequests" :key="req.id" class="hover:bg-gray-50/50 transition-colors">
                                     <!-- Employé -->
-                                    <td class="py-4 px-6 whitespace-nowrap font-semibold text-gray-900">
-                                        {{ req.employee ? req.employee.first_name + ' ' + req.employee.last_name : 'N/A' }}
+                                    <td class="py-4 px-6 whitespace-nowrap">
+                                        <div class="flex items-center space-x-3">
+                                            <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-xs flex-shrink-0 border border-indigo-100/50">
+                                                {{ req.employee && req.employee.first_name ? req.employee.first_name.charAt(0) : '' }}{{ req.employee && req.employee.last_name ? req.employee.last_name.charAt(0) : '' }}
+                                            </div>
+                                            <span class="font-semibold text-gray-900">
+                                                {{ req.employee ? req.employee.first_name + ' ' + req.employee.last_name : 'N/A' }}
+                                            </span>
+                                        </div>
                                     </td>
 
                                     <!-- Type -->
                                     <td class="py-4 px-6 whitespace-nowrap text-gray-600 font-medium">
-                                        {{ req.leave_type ? req.leave_type.name : 'N/A' }}
+                                        <span class="inline-flex items-center px-2.5 py-1 bg-gray-100 text-gray-700 rounded-lg text-xs font-medium">
+                                            {{ req.leave_type ? req.leave_type.name : 'N/A' }}
+                                        </span>
                                     </td>
 
                                     <!-- Période -->
-                                    <td class="py-4 px-6 whitespace-nowrap text-gray-500 text-xs">
+                                    <td class="py-4 px-6 whitespace-nowrap text-xs text-gray-500">
                                         <span class="font-medium text-gray-800">{{ req.start_date }}</span> <span class="text-gray-400 mx-1">au</span> <span class="font-medium text-gray-800">{{ req.end_date }}</span>
                                     </td>
 
@@ -106,11 +133,11 @@ const deleteRequest = (id) => {
                                     <td class="py-4 px-6 whitespace-nowrap text-right font-medium">
                                         <!-- Si Admin -->
                                         <template v-if="userRole === 'admin'">
-                                            <div class="inline-flex items-center justify-end space-x-1.5">
+                                            <div class="inline-flex items-center justify-end space-x-2">
                                                 <button v-if="req.status !== 'approved' && req.status !== 'approuvé'" @click="approveRequest(req.id)" class="px-2.5 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg text-xs font-semibold transition border border-emerald-200/60">Approuver</button>
                                                 <button v-if="req.status !== 'en_attente'" @click="pendingRequest(req.id)" class="px-2.5 py-1 bg-amber-50 hover:bg-amber-100 text-amber-700 rounded-lg text-xs font-semibold transition border border-amber-200/60">En attente</button>
                                                 <button v-if="req.status !== 'rejected' && req.status !== 'rejeté'" @click="rejectRequest(req.id)" class="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg text-xs font-semibold transition border border-rose-200/60">Rejeter</button>
-                                                <button @click="deleteRequest(req.id)" class="p-1 text-gray-400 hover:text-rose-600 rounded-lg transition ml-1" title="Supprimer">
+                                                <button @click="deleteRequest(req.id)" class="p-1.5 text-gray-400 hover:text-rose-600 rounded-lg transition ml-1 hover:bg-rose-50" title="Supprimer">
                                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
                                                 </button>
                                             </div>
@@ -119,11 +146,11 @@ const deleteRequest = (id) => {
                                         <!-- Si Employé -->
                                         <template v-else>
                                             <div v-if="req.status === 'en_attente'" class="inline-flex items-center space-x-2">
-                                                <Link :href="route('leave-requests.edit', req.id)" class="px-3 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg text-xs font-semibold transition border border-indigo-200/60">Modifier</Link>
-                                                <button @click="deleteRequest(req.id)" class="px-3 py-1 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-lg text-xs font-semibold transition border border-rose-200/60">Supprimer</button>
+                                                <Link :href="route('leave-requests.edit', req.id)" class="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-semibold transition border border-indigo-200/60 shadow-sm">Modifier</Link>
+                                                <button @click="deleteRequest(req.id)" class="px-3 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-xl text-xs font-semibold transition border border-rose-200/60 shadow-sm">Supprimer</button>
                                             </div>
-                                            <span v-else class="inline-flex items-center space-x-1 px-2.5 py-1 text-xs font-medium text-gray-400 bg-gray-100 rounded-lg">
-                                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                                            <span v-else class="inline-flex items-center space-x-1.5 px-3 py-1.5 text-xs font-medium text-gray-400 bg-gray-100/80 rounded-xl border border-gray-200">
+                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
                                                 <span>Verrouillé</span>
                                             </span>
                                         </template>
