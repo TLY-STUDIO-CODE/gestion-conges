@@ -51,11 +51,11 @@ const submit = () => {
                     </div>
 
                     <form @submit.prevent="submit" class="space-y-6">
-                        <!-- Employé -->
+                        <!-- Collaborateur -->
                         <div>
-                            <InputLabel for="employee_id" value="Employé concerné" class="text-gray-700 font-medium text-xs uppercase tracking-wider mb-1.5" />
+                            <InputLabel for="employee_id" value="Collaborateur concerné" class="text-gray-700 font-medium text-xs uppercase tracking-wider mb-1.5" />
                             <select id="employee_id" v-model="form.employee_id" class="mt-1 block w-full border-gray-200 bg-gray-50/50 focus:bg-white focus:border-indigo-500 focus:ring-indigo-500 rounded-xl shadow-sm text-sm py-2.5 px-3.5 transition-all" required>
-                                <option value="" disabled>Sélectionnez un employé</option>
+                                <option value="" disabled>Sélectionnez un collaborateur</option>
                                 <option v-for="emp in employees" :key="emp.id" :value="emp.id">
                                     {{ emp.first_name }} {{ emp.last_name }}
                                 </option>

@@ -74,7 +74,7 @@ const deleteRequest = (id) => {
                         <table class="min-w-full divide-y divide-gray-100">
                             <thead>
                                 <tr class="bg-gray-50/50 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                                    <th class="py-3.5 px-6">Employé</th>
+                                    <th class="py-3.5 px-6">Collaborateur</th>
                                     <th class="py-3.5 px-6">Type</th>
                                     <th class="py-3.5 px-6">Du / Au</th>
                                     <th class="py-3.5 px-6">Jours</th>
@@ -84,7 +84,7 @@ const deleteRequest = (id) => {
                             </thead>
                             <tbody class="divide-y divide-gray-50 text-sm">
                                 <tr v-for="req in leaveRequests" :key="req.id" class="hover:bg-gray-50/50 transition-colors">
-                                    <!-- Employé -->
+                                    <!-- Collaborateur -->
                                     <td class="py-4 px-6 whitespace-nowrap">
                                         <div class="flex items-center space-x-3">
                                             <div class="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-xs flex-shrink-0 border border-indigo-100/50">
@@ -143,7 +143,7 @@ const deleteRequest = (id) => {
                                             </div>
                                         </template>
 
-                                        <!-- Si Employé -->
+                                        <!-- Si Collaborateur -->
                                         <template v-else>
                                             <div v-if="req.status === 'en_attente'" class="inline-flex items-center space-x-2">
                                                 <Link :href="route('leave-requests.edit', req.id)" class="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-xl text-xs font-semibold transition border border-indigo-200/60 shadow-sm">Modifier</Link>
