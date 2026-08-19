@@ -16,6 +16,16 @@ const employeeName = computed(() => {
     return props.employee?.name || authUser.value?.name || 'Collaborateur';
 });
 
+// Récupération sécurisée du nom de l'entreprise B2B (Tenant / Organisation)
+const tenantCompanyName = computed(() => {
+    return props.employee?.company?.name || page.props.auth.company?.name || authUser.value?.company_name || 'Espace Entreprise';
+});
+
+// Récupération sécurisée de la région (dynamique pour le SaaS B2B)
+const employeeRegion = computed(() => {
+    return props.employee?.region || props.employee?.company?.region || 'Madagascar';
+});
+
 // Récupération sécurisée du département (relation objet ou texte direct)
 const employeeDepartment = computed(() => {
     if (!props.employee) return 'Non assigné';
@@ -68,13 +78,19 @@ const totalRequestsCount = computed(() => {
 </script>
 
 <template>
-    <Head title="Mon Espace Salarié" />
+    <Head title="Mon Espace Salarié - B2B SaaS" />
 
     <AuthenticatedLayout>
         <template #header>
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h2 class="font-bold text-2xl text-gray-900 tracking-tight">Espace Personnel</h2>
+                    <div class="flex items-center space-x-2">
+                        <span class="px-2.5 py-0.5 text-xs font-semibold bg-indigo-50 text-indigo-700 rounded-md border border-indigo-100">
+                            {{ tenantCompanyName }}
+                        </span>
+                        <span class="text-xs text-gray-400">| Portail Collaborateur</span>
+                    </div>
+                    <h2 class="font-bold text-2xl text-gray-900 tracking-tight mt-1">Espace Personnel</h2>
                     <p class="text-sm text-gray-500 mt-0.5">Bienvenue sur votre tableau de bord collaborateur.</p>
                 </div>
                 <Link :href="route('leave-requests.create')" class="inline-flex items-center space-x-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-sm rounded-xl shadow-sm hover:shadow transition-all duration-150">
@@ -92,7 +108,7 @@ const totalRequestsCount = computed(() => {
                     <svg class="w-5 h-5 text-amber-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
                     <div>
                         <p class="font-semibold text-sm">Profil non lié</p>
-                        <p class="text-sm text-amber-700 mt-0.5">Votre compte utilisateur n'est pas encore associé à un profil employé. Veuillez contacter le service des ressources humaines.</p>
+                        <p class="text-sm text-amber-700 mt-0.5">Votre compte utilisateur n'est pas encore associé à un profil employé. Veuillez contacter l'administrateur de votre entreprise.</p>
                     </div>
                 </div>
 
@@ -144,8 +160,8 @@ const totalRequestsCount = computed(() => {
                                 <div class="text-lg font-bold text-gray-900 truncate">{{ employeeDepartment }}</div>
                             </div>
                             <div class="mt-6 pt-3 border-t border-gray-50 flex items-center justify-between text-xs">
-                                <span class="text-gray-500">Région</span>
-                                <span class="font-medium text-gray-700">Haute Matsiatra</span>
+                                <span class="text-gray-500">Localisation</span>
+                                <span class="font-medium text-gray-700 truncate max-w-[150px]">{{ employeeRegion }}</span>
                             </div>
                         </div>
 
@@ -183,7 +199,7 @@ const totalRequestsCount = computed(() => {
                             </div>
                             <div class="mt-6 pt-3 border-t border-gray-50 flex items-center justify-between text-xs">
                                 <span class="text-gray-500">Fuseau</span>
-                                <span class="font-medium text-purple-600">Synchro Live</span>
+                                <span class="font-medium text-purple-600">Synchronisé </span>
                             </div>
                         </div>
 
