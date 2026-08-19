@@ -24,9 +24,9 @@ const deleteEmployee = (id) => {
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
                     <h2 class="font-bold text-2xl text-gray-900 tracking-tight">
-                        Gestion des Collaborateurs
+                        Gestion des collaborateurs
                     </h2>
-                    <p class="text-sm text-gray-500 mt-0.5">Administrez les dossiers salariés et suivez leurs soldes de congés.</p>
+                    <p class="text-sm text-gray-500 mt-0.5">Pilotage, suivi des performances et organisation des équipes en temps réel</p>
                 </div>
                 <Link :href="route('employees.create')" class="inline-flex items-center space-x-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-sm rounded-xl shadow-sm hover:shadow transition-all duration-150">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
@@ -41,8 +41,8 @@ const deleteEmployee = (id) => {
 
                     <div class="flex items-center justify-between mb-6">
                         <div>
-                            <h3 class="font-bold text-lg text-gray-900 tracking-tight">Annuaire des Salariés</h3>
-                            <p class="text-xs text-gray-500 mt-0.5 font-medium">{{ employees.length }} collaborateur(s) actif(s)</p>
+                            <h3 class="font-bold text-lg text-gray-900 tracking-tight">Annuaire des salariés</h3>
+                            <p class="text-xs text-gray-500 mt-0.5 font-medium">{{ employees.length }} collaborateur(s)</p>
                         </div>
                     </div>
 

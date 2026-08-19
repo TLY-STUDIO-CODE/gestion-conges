@@ -28,7 +28,7 @@ const rejectRequest = (id) => {
         <template #header>
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h2 class="font-bold text-2xl text-gray-900 tracking-tight">Espace RH : Validation des Congés</h2>
+                    <h2 class="font-bold text-2xl text-gray-900 tracking-tight">Espace RH : Validation des congés</h2>
                     <p class="text-sm text-gray-500 mt-0.5">Traitez rapidement les demandes de congés en attente de validation.</p>
                 </div>
                 <Link :href="route('leave-requests.index')" class="inline-flex items-center space-x-2 px-4 py-2.5 bg-white hover:bg-gray-50 text-gray-700 font-medium text-sm rounded-xl border border-gray-200 shadow-sm transition-all duration-150">

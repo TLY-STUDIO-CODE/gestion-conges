@@ -38,7 +38,7 @@ const deleteRequest = (id) => {
         <template #header>
             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <h2 class="font-bold text-2xl text-gray-900 tracking-tight">Suivi des Demandes de Congés</h2>
+                    <h2 class="font-bold text-2xl text-gray-900 tracking-tight">Suivi des demandes de congés</h2>
                     <p class="text-sm text-gray-500 mt-0.5">Gérez et suivez l'ensemble des requêtes de congés du personnel.</p>
                 </div>
                 <Link :href="route('leave-requests.create')" class="inline-flex items-center space-x-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-sm rounded-xl shadow-sm hover:shadow transition-all duration-150">

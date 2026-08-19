@@ -83,9 +83,9 @@ const totalRequestsCount = computed(() => {
                         <span class="px-2.5 py-0.5 text-xs font-semibold bg-indigo-50 text-indigo-700 rounded-md border border-indigo-100">
                             {{ tenantCompanyName }}
                         </span>
-                        <span class="text-xs text-gray-400">| Portail Collaborateur</span>
+                        <span class="text-xs text-gray-400">| Portail collaborateur</span>
                     </div>
-                    <h2 class="font-bold text-2xl text-gray-900 tracking-tight mt-1">Espace Personnel</h2>
+                    <h2 class="font-bold text-2xl text-gray-900 tracking-tight mt-1">Espace personnel</h2>
                     <p class="text-sm text-gray-500 mt-0.5">Bienvenue sur votre tableau de bord collaborateur.</p>
                 </div>
                 <Link :href="route('leave-requests.create')" class="inline-flex items-center space-x-2 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-sm rounded-xl shadow-sm hover:shadow transition-all duration-150">

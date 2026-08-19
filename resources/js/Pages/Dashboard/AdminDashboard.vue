@@ -46,8 +46,8 @@ onUnmounted(() => {
             <div class="flex items-center justify-between">
                 <!-- Titre expert et concis -->
                 <div>
-                    <h2 class="font-bold text-2xl text-gray-900 leading-tight">Tableau de bord exécutif</h2>
-                    <p class="text-sm text-gray-500 font-medium">Gestion centralisée des ressources humaines</p>
+                    <h2 class="font-bold text-2xl text-gray-900 leading-tight">Tableau de bord</h2>
+                    <p class="text-sm text-gray-500 font-medium">Vue d'ensemble de la performance et des indicateurs clés en temps réel</p>
                 </div>
 
                 <!-- Indicateur de session moderne -->
@@ -72,7 +72,7 @@ onUnmounted(() => {
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 border-l-4 border-indigo-600 flex flex-col justify-between hover:shadow-md transition">
                         <div>
                             <div class="flex items-center justify-between text-gray-500 text-sm font-medium mb-1">
-                                <span>Collaborateurs Actifs</span>
+                                <span>Collaborateurs</span>
                                 <svg class="w-5 h-5 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
                                 </svg>
@@ -107,7 +107,7 @@ onUnmounted(() => {
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 border-l-4 border-purple-500 flex flex-col justify-between hover:shadow-md transition">
                         <div>
                             <div class="flex items-center justify-between text-gray-500 text-sm font-medium mb-1">
-                                <span>Volume Global des Congés</span>
+                                <span>Volume global des congés</span>
                                 <svg class="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                                 </svg>
@@ -144,7 +144,7 @@ onUnmounted(() => {
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 border-l-4 border-emerald-500 flex flex-col justify-between hover:shadow-md transition">
                         <div>
                             <div class="flex items-center justify-between text-gray-500 text-sm font-medium mb-1">
-                                <span>Demandes Validées</span>
+                                <span>Demandes validées</span>
                                 <svg class="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
@@ -163,7 +163,7 @@ onUnmounted(() => {
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 border-l-4 border-red-500 flex flex-col justify-between hover:shadow-md transition">
                         <div>
                             <div class="flex items-center justify-between text-gray-500 text-sm font-medium mb-1">
-                                <span>Demandes Refusées</span>
+                                <span>Demandes refusées</span>
                                 <svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
@@ -202,7 +202,7 @@ onUnmounted(() => {
                         <div>
                             <div class="flex items-center justify-between text-gray-500 text-sm font-medium mb-1">
                                 <div class="flex items-center space-x-2">
-                                    <span>Actions Requises</span>
+                                    <span>Actions requises</span>
                                     <!-- Pastille rouge conditionnelle : s'affiche uniquement si supérieur à 0 -->
                                     <span v-if="pendingRequestsCount > 0" class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-red-100 text-red-600 animate-pulse">
                                         {{ pendingRequestsCount }}
