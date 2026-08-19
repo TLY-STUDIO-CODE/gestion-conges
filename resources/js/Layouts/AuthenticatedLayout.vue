@@ -40,7 +40,7 @@ const isAdmin = computed(() => {
                                     :href="route('dashboard')"
                                     :active="route().current('dashboard')"
                                 >
-                                    Dashboard
+                                    Tableau de bord
                                 </NavLink>
 
                                 <!-- Liens spécifiques Administrateur (Visibles pour tous les admins) -->
@@ -49,7 +49,7 @@ const isAdmin = computed(() => {
                                         :href="route('employees.index')"
                                         :active="route().current('employees.*')"
                                     >
-                                        Employés
+                                        Collaborateurs
                                     </NavLink>
                                     <NavLink
                                         :href="route('leave-requests.pending')"
@@ -104,7 +104,7 @@ const isAdmin = computed(() => {
                                         <div class="p-1">
                                             <DropdownLink :href="route('profile.edit')" class="flex items-center space-x-2 rounded-lg px-3 py-2 text-xs font-semibold text-gray-700 hover:bg-gray-50">
                                                 <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-                                                <span>Profile</span>
+                                                <span>Mon Compte</span>
                                             </DropdownLink>
                                             <div class="my-1 border-t border-gray-100"></div>
                                             <DropdownLink
@@ -114,7 +114,7 @@ const isAdmin = computed(() => {
                                                 class="w-full flex items-center space-x-2 rounded-lg px-3 py-2 text-xs font-semibold text-rose-600 hover:bg-rose-50"
                                             >
                                                 <svg class="w-4 h-4 text-rose-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
-                                                <span>Log Out</span>
+                                                <span>Déconnexion</span>
                                             </DropdownLink>
                                         </div>
                                     </template>

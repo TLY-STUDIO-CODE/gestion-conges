@@ -17,7 +17,7 @@ defineProps({
 
     <div class="min-h-screen bg-[#070b14] text-slate-100 flex flex-col justify-between selection:bg-blue-600 selection:text-white relative overflow-hidden font-sans">
 
-        <!-- Bandeau supérieur institutionnel officiel (Standard Gouvernemental International) -->
+        <!-- Bandeau supérieur institutionnel officiel -->
         <div class="bg-[#0b1329] border-b border-slate-800/80 text-[11px] text-slate-400 py-1.5 px-4 sm:px-6 lg:px-8 relative z-50">
             <div class="max-w-7xl mx-auto flex items-center justify-between">
                 <div class="flex items-center space-x-2">
@@ -32,14 +32,13 @@ defineProps({
             </div>
         </div>
 
-        <!-- Effets lumineux de fond subtils (Mesh/Glow SaaS) -->
+        <!-- Effets lumineux de fond SaaS -->
         <div class="absolute top-20 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-blue-600/10 rounded-full blur-[140px] pointer-events-none"></div>
 
-        <!-- En-tête / Header Institutionnel Principal -->
+        <!-- En-tête / Header Principal -->
         <header class="bg-[#070b14]/80 backdrop-blur-xl border-b border-slate-800/80 sticky top-0 z-40">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
                 <div class="flex items-center space-x-4">
-                    <!-- Sceau / Logo Officiel -->
                     <div class="w-12 h-12 bg-slate-800/80 border border-slate-700/80 rounded-xl flex items-center justify-center p-2 shadow-inner backdrop-blur-md">
                         <ApplicationLogo class="w-full h-full object-contain" />
                     </div>
@@ -86,29 +85,25 @@ defineProps({
             </div>
         </header>
 
-        <!-- Contenu Principal / Hero Section Ultra Pro Max -->
+        <!-- Contenu Principal / Hero Section -->
         <main class="flex-grow flex items-center justify-center px-4 sm:px-6 lg:px-8 py-16 relative z-10">
             <div class="max-w-4xl w-full text-center space-y-8">
 
-                <!-- Badge Institutionnel Dynamique -->
                 <div class="inline-flex items-center space-x-2 bg-slate-800/50 border border-slate-700/60 px-4 py-1.5 rounded-full text-xs font-medium text-slate-300 shadow-sm backdrop-blur-md">
                     <span class="text-blue-400 font-bold">Fianarantsoa</span>
                     <span class="text-slate-600">•</span>
                     <span class="text-slate-300">Portail Administratif Numérique Officiel</span>
                 </div>
 
-                <!-- Titre Majeur Inspirant -->
                 <h2 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight leading-[1.15]">
                     Gestion Simplifiée & Fiable <br class="hidden sm:inline" />
                     <span class="bg-gradient-to-r from-blue-400 via-indigo-300 to-indigo-500 bg-clip-text text-transparent">des Congés et du Personnel</span>
                 </h2>
 
-                <!-- Description Profonde et Élégante -->
                 <p class="text-base sm:text-lg text-slate-300 max-w-2xl mx-auto leading-relaxed font-normal">
                     Plateforme officielle dédiée à la gestion humaine de proximité, au suivi rigoureux des congés et à l'accompagnement quotidien des agents du service public de la Région Haute Matsiatra.
                 </p>
 
-                <!-- Bouton d'action principal Ultra Travaillé -->
                 <div class="flex flex-col sm:flex-row justify-center items-center space-y-3 sm:space-y-0 sm:space-x-4 pt-4">
                     <Link
                         v-if="!$page.props.auth.user"
@@ -126,7 +121,6 @@ defineProps({
                     </Link>
                 </div>
 
-                <!-- Grille d'engagements / Fonctionnalités Niveau Pro Max -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-16 text-left">
                     <div class="bg-slate-800/30 backdrop-blur-md p-6 rounded-2xl border border-slate-800 hover:border-slate-700 transition group shadow-lg">
                         <div class="w-10 h-10 rounded-xl bg-blue-600/10 border border-blue-500/20 text-blue-400 flex items-center justify-center font-bold mb-4 text-xs group-hover:scale-105 transition">
@@ -156,7 +150,7 @@ defineProps({
             </div>
         </main>
 
-        <!-- Pied de page / Footer Institutionnel Pro Max -->
+        <!-- Pied de page / Footer -->
         <footer class="bg-[#050810] border-t border-slate-800/80 py-8 relative z-10">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 space-y-4 sm:space-y-0">
                 <div class="flex items-center space-x-2">
